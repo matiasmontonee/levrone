@@ -1,0 +1,101 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { getAuth, signInWithEmailAndPassword } from "../firebase";
+import Logo from '../assets/imgs/logos/logo.png';
+
+const Login = () => {
+  const auth = getAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [credentialsError, setCredentialsError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const redirectToHome = () => {
+    window.location.href = '/';
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleLogin = async () => {
+    setEmailError('');
+    setPasswordError('');
+  
+    let hasError = false;
+  
+    if (!email) {
+      setEmailError('Ingrese un correo electrónico.');
+      hasError = true;
+    } else if (!isValidEmail(email)) {
+      setEmailError('Ingrese un correo electrónico válido.');
+      hasError = true;
+    }
+  
+    if (!password) {
+      setPasswordError('Ingrese una contraseña.');
+      hasError = true;
+    }
+  
+    if (hasError) {
+      return;
+    }
+  
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      
+      setEmail('');
+      setPassword('');
+  
+      redirectToHome();
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.message);
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        setCredentialsError('Credenciales incorrectas.');
+      } else {
+        setCredentialsError('Credenciales incorrectas. Por favor, inténtelo nuevamente.');
+      }
+      
+    }
+  };
+
+  return (
+    <section id='login'>
+      <Link to={'/'}><button className='m-6 mb-0 py-2 px-4 bg-red-500 hover:bg-red-400 rounded-md text-xl text-white'><FaArrowLeft /></button></Link>
+      <img src={Logo} alt="Logo de Levrone" className="h-32 w-40 m-auto mt-8" />
+
+      <main className="flex justify-center items-center mt-4">
+        <div className="border shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-3/4 lg:w-1/3">
+          <h2 className="text-2xl mb-4 text-center">¡Bienvenido!</h2>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Correo Electrónico</label>
+            <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${emailError && 'border-red-500'}`} id="email" type="email" placeholder="juan@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
+          </div>
+          <div className='mb-4'>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Contraseña</label>
+            <div className="relative">
+              <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${passwordError && 'border-red-500'}`} id="password" type={showPassword ? "text" : "password"} placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} />
+              <button className="absolute top-3 right-4" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
+          </div>
+          {credentialsError && <p className="text-red-500 text-sm mb-3">{credentialsError}</p>}
+          <p className="text-sm"><Link to={`/recuperarpassword`} className='text-red-600 hover:text-red-500 hover:underline'>¿Olvidó su contraseña?</Link></p>
+          <div className='mt-2'>
+            <button className="bg-red-600 hover:bg-red-400 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>Iniciar Sesión</button>
+            <p className="text-sm mt-2 text-center">¿No tienes una cuenta? <Link to={`/registro`} className='text-blue-500 underline hover:text-blue-400'>Registrarse</Link></p>
+          </div>
+        </div>
+      </main>
+    </section>
+  );
+};
+
+export default Login;
