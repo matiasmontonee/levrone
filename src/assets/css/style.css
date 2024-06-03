@@ -2,7 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-/* EVITAR OVERFLOW */
+/* EVITAR OVERFLOW */  
 
 html, body {
     overflow-x: hidden;
@@ -56,6 +56,16 @@ input[type=number]::-webkit-outer-spin-button {
     color: #d12020; 
 }
 
+/* CARRITO */
+
+.carrito-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+.carrito-icon.agregado {
+    transform: rotate(360deg);
+}
+
 /* HOME */
 
 .banner:hover {
@@ -66,7 +76,15 @@ input[type=number]::-webkit-outer-spin-button {
     .btn-banner {
       font-size: small;
     }
-}  
+}
+
+/* BLOG */
+
+.blog-hover:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
 /* ENVIOS */
 
