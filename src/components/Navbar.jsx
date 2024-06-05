@@ -172,7 +172,7 @@ const Navbar = () => {
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-50" onClick={toggleMenu}></div>
       )}
-      <div ref={menuRef} className={`lg:hidden fixed inset-0 bg-black z-50 transform transition-transform ease-in-out duration-500 w-3/4 overflow-y-auto ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div ref={menuRef} className={`lg:hidden fixed inset-0 bg-black z-50 transform transition-transform ease-in-out duration-500 w-full overflow-y-auto ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col items-start p-4 pt-0">
           <div className="flex justify-between items-center w-full">
             <p className='text-lg text-white p-4 pt-6 pb-6 pl-0'>Menú</p>
@@ -217,7 +217,7 @@ const Navbar = () => {
       {isCartOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50" onClick={toggleCart}></div>
       )}
-      <div ref={cartRef} className={`overflow-y-auto fixed top-0 right-0 bottom-0 bg-white z-50 transform transition-transform ease-in-out duration-500 w-3/4 lg:w-2/4 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div ref={cartRef} className={`overflow-y-auto fixed top-0 right-0 bottom-0 bg-white z-50 transform transition-transform ease-in-out duration-500 w-full lg:w-2/4 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col items-start p-4 pt-0">
           <div className="flex justify-between items-center w-full text-lg">
             <p className='p-4 py-6 pl-0'>Carrito</p>
