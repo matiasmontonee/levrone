@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector  } from 'react-redux';
 import { eliminarProductoDelCarrito, vaciarCarrito, incrementarCantidadProducto, decrementarCantidadProducto } from '../store';
-import { FaTimes, FaHome, FaUser, FaDumbbell, FaPhoneAlt, FaBars, FaShoppingCart, FaShippingFast, FaQuestionCircle, FaTrash, FaArrowRight, FaShoppingBag, FaNewspaper, FaPlus, FaMinus } from 'react-icons/fa';
+import { FaTimes, FaHome, FaUser, FaDumbbell, FaPhoneAlt, FaBars, FaShoppingCart, FaShippingFast, FaQuestionCircle, FaTrash, FaArrowRight, FaShoppingBag, FaNewspaper, FaPlus, FaMinus, FaComments } from 'react-icons/fa';
 import Logo from '../assets/imgs/logos/logo.png';
 import { useAuth } from '../hooks/useAuth';
 
@@ -106,8 +106,9 @@ const Navbar = () => {
       <div className="hidden lg:flex items-center">
         <Link to={`/`} className="nav-link text-lg text-white mr-4">Inicio</Link> 
         <Link to={`/quienes-somos`} className="nav-link text-lg text-white mr-4">Quiénes somos</Link> 
-        {isAuthenticated && <Link to={`/blog`} className="nav-link text-lg text-white mr-4">Blog</Link>}
         <Link to={`/productos`} className="nav-link text-lg text-white mr-4">Productos</Link> 
+        {/* {isAuthenticated && }*/} <Link to={`/blog`} className="nav-link text-lg text-white mr-4">Blog</Link>
+        {/* {isAuthenticated && }*/} <Link to={`/foro`} className="nav-link text-lg text-white mr-4">Foro</Link>
         <Link to={`/envios`} className="nav-link text-lg text-white mr-4">Envíos</Link> 
         <Link to={`/contacto`} className="nav-link text-lg text-white mr-4">Contacto</Link> 
       </div>
@@ -184,11 +185,14 @@ const Navbar = () => {
           <Link to={`/quienes-somos`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaQuestionCircle className="inline-block mr-2 mb-1" />Quiénes somos
           </Link>
-          {isAuthenticated && <Link to={`/blog`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
-            <FaNewspaper className="inline-block mr-2 mb-1" />Blog
-          </Link>}
           <Link to={`/productos`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaDumbbell className="inline-block mr-2 mb-1" />Productos
+          </Link>
+          {/* {isAuthenticated && } */}<Link to={`/blog`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+            <FaNewspaper className="inline-block mr-2 mb-1" />Blog
+          </Link>
+          {/* {isAuthenticated && } */}<Link to={`/foro`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+            <FaComments className="inline-block mr-2 mb-1" />Foro
           </Link>
           <Link to={`/envios`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaShippingFast className="inline-block mr-2 mb-1" />Envíos
