@@ -14,6 +14,7 @@ import Productos from './views/Productos';
 import Detalles from './views/Detalles';
 import Envios from './views/Envios';
 import Contacto from './views/Contacto';
+import Programa from './views/Programa';
 import Login from './views/Login';
 import Registro from './views/Registro';
 import RecuperarPassword from './views/RecuperarPassword';
@@ -46,6 +47,7 @@ function App() {
             <Route path="/registro" element={<Registro />} />
             <Route path="/recuperarpassword" element={<RecuperarPassword />} />
             <Route path="/compras" element={<RegistroCompras />} /> {/* agregar ruta protegida */}
+            <Route path="/programa" element={<Programa />} /> {/* agregar ruta protegida */}
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmacion" element={<Confirmacion />} />
             <Route path="*" element={<Error404 />} />
