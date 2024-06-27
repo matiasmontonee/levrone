@@ -23,7 +23,6 @@ import Checkout from './views/Checkout';
 import Confirmacion from './views/Confirmacion';
 import Error404 from './views/Error404';
 import Footer from './components/Footer';
-// import RutaProtegida from './components/RutaProtegida';
 
 function App() {
 
@@ -35,10 +34,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/quienes-somos" element={<QuienesSomos />} />
-            <Route path="/blog" element={<Blog />} /> {/* agregar ruta protegida */}
-            <Route path="/blog/:id" element={<BlogDetalles />} /> {/* agregar ruta protegida */}
-            <Route path="/foro" element={<Foro />} /> {/* agregar ruta protegida */}
-            <Route path="/post" element={<Post />} /> {/* agregar ruta protegida */}
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:id" element={<BlogDetalles />} />
+            <Route path="/foro" element={<Foro />} />
+            <Route path="/post" element={<Post />} />
             <Route path="/productos" element={<Productos />} />
             <Route path="/productos/:id" element={<Detalles />} />
             <Route path="/envios" element={<Envios />} />
@@ -46,8 +45,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/recuperarpassword" element={<RecuperarPassword />} />
-            <Route path="/compras" element={<RegistroCompras />} /> {/* agregar ruta protegida */}
-            <Route path="/programa" element={<Programa />} /> {/* agregar ruta protegida */}
+            <Route path="/compras" element={<RegistroCompras />} />
+            <Route path="/programa" element={<Programa />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmacion" element={<Confirmacion />} />
             <Route path="*" element={<Error404 />} />
