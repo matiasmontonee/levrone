@@ -107,10 +107,10 @@ const Navbar = () => {
         <Link to={`/`} className="nav-link text-lg text-white mr-4">Inicio</Link> 
         <Link to={`/quienes-somos`} className="nav-link text-lg text-white mr-4">Quiénes somos</Link> 
         <Link to={`/productos`} className="nav-link text-lg text-white mr-4">Productos</Link> 
-        {/* {isAuthenticated && }*/} <Link to={`/blog`} className="nav-link text-lg text-white mr-4">Blog</Link>
-        {/* {isAuthenticated && }*/} <Link to={`/foro`} className="nav-link text-lg text-white mr-4">Foro</Link>
         <Link to={`/envios`} className="nav-link text-lg text-white mr-4">Envíos</Link> 
         <Link to={`/contacto`} className="nav-link text-lg text-white mr-4">Contacto</Link> 
+        {isAuthenticated && <Link to={`/blog`} className="nav-link text-lg text-white mr-4">Blog</Link>}
+        {isAuthenticated && <Link to={`/foro`} className="nav-link text-lg text-white mr-4">Foro</Link>}
       </div>
       {/* CARRITO Y LOGIN*/}
       <div className="hidden lg:flex items-center text-white relative" ref={cartRef}>
@@ -126,16 +126,16 @@ const Navbar = () => {
         <div className="relative" ref={userDropdownRef}>
           <button onClick={toggleUserDropdown}><FaUser className='w-7 h-7 logo mr-3' /></button>
           {isUserDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded-md shadow-lg">
+            <div className="absolute right-0 mt-2 w-96 bg-white border rounded-md shadow-lg">
               {isAuthenticated ? ( // Si el usuario está autenticado 
                 <>
-                  <button onClick={logout} className="block px-4 py-2 text-black hover:bg-gray-200">Cerrar sesión ({user.email})</button>
                   <Link to="/compras" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Mis compras</Link>
+                  <Link to="/programa" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Programa de afiliados</Link>
+                  <button onClick={logout} className="block px-4 py-2 text-black hover:bg-gray-200">Cerrar sesión ({user.email})</button>
                 </>
               ) : ( // Si no lo está
                 <>
                   <Link to="/login" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Iniciar sesión</Link>
-                  <Link to="/programa" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Programa de afiliados</Link> {/* este pasarlo a autenticado */}
                 </>
               )}
             </div>
@@ -191,12 +191,6 @@ const Navbar = () => {
           <Link to={`/productos`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaDumbbell className="inline-block mr-2 mb-1" />Productos
           </Link>
-          {/* {isAuthenticated && } */}<Link to={`/blog`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
-            <FaNewspaper className="inline-block mr-2 mb-1" />Blog
-          </Link>
-          {/* {isAuthenticated && } */}<Link to={`/foro`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
-            <FaComments className="inline-block mr-2 mb-1" />Foro
-          </Link>
           <Link to={`/envios`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaShippingFast className="inline-block mr-2 mb-1" />Envíos
           </Link>
@@ -204,17 +198,23 @@ const Navbar = () => {
             <FaPhoneAlt className="inline-block mr-2 mb-1.5" />Contacto
           </Link>
           {isAuthenticated ? ( // Si el usuario está autenticado
-            <div>
+            <>
+              <Link to={`/blog`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+                <FaNewspaper className="inline-block mr-2 mb-1" />Blog
+              </Link>
+              <Link to={`/foro`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+                <FaComments className="inline-block mr-2 mb-1" />Foro
+              </Link>
               <Link to={`/compras`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
                 <FaShoppingBag className="inline-block mr-2 mb-1.5" />Mis compras
               </Link>
               <Link to={`/programa`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
                 <FaTrophy className="inline-block mr-2 mb-1.5" />Programa de afiliados
               </Link>
-              <button onClick={logout} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full">
-                <FaUser className="inline-block mr-2 mb-1.5" />Cerrar Sesión ({user.email})
+              <button onClick={logout} className="nav-link text-lg text-white text-left border-b border-white p-6 pl-0 w-full">
+                <FaUser className="inline-block mr-2 mb-1.5 text-left" />Cerrar Sesión ({user.email})
               </button>
-            </div>
+            </>
           ) : ( // Si no lo está
             <Link to={`/login`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
               <FaUser className="inline-block mr-2 mb-1.5" />Iniciar Sesión
