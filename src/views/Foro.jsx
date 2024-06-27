@@ -83,7 +83,7 @@ const Foro = () => {
           <div className='mt-6 px-4'>
             {posts.map(post => (
               <div key={post.id} className='border border-gray-400 rounded p-4 my-4'>
-                <p className='text-sm mb-2'>{post.user}Matías Montone</p>
+                <p className='text-sm mb-2'>{post.user}</p>
                 <h2 className='text-xl sm:text-2xl mb-2 font-bold'>{post.title}</h2>
                 <p className='sm:text-lg'>{post.description}</p>
                 <div className='flex justify-between items-center mt-2'>
@@ -102,7 +102,7 @@ const Foro = () => {
                     {post.comments.map(comment => (
                       <div key={comment.id} className='mt-2 border border-gray-400 rounded p-2'>
                         <div className="flex justify-between items-center">
-                          <p className='text-sm mb-2'>{comment.user}Lucas Martínez</p>
+                          <p className='text-sm mb-2'>{comment.user}</p>
                           <p className='text-gray-500 text-sm'>{new Date(comment.createdAt.seconds * 1000).toLocaleString()}</p>
                         </div>
                         <p className='sm:text-lg'>{comment.comment}</p>
