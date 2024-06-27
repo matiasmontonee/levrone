@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { getAuth, createUserWithEmailAndPassword } from "../firebase";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "../firebase";
 import Logo from '../assets/imgs/logos/logo.png';
 
 const Registro = () => {
@@ -76,6 +76,9 @@ const Registro = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log('Usuario creado con éxito:', user);
+
+      // Guardar el nombre de usuario
+      await updateProfile(user, { displayName: name });
       
       setName('');
       setEmail('');
