@@ -24,7 +24,7 @@ const ModalError = ({ onClose }) => {
           </button>
         </div>
         <h2 className="text-lg sm:text-2xl font-bold pr-6 mb-4 mt-4">Formulario enviado sin éxito</h2>
-        <p className="text-md sm:text-lg pr-8 text-gray-600">Ups! Algo salió mal. Por favor inténtalo de nuevo.</p>
+        <p className="text-md sm:text-lg pr-8 text-gray-600">Ups! Algo salió mal. Por favor, intentalo de nuevo.</p>
       </div>
     </div>
   );

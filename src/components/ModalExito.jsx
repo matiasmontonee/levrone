@@ -24,7 +24,7 @@ const ModalExito = ({ onClose }) => {
           </button>
         </div>
         <h2 className="text-lg sm:text-2xl font-bold pr-6 mb-4 mt-4">Formulario enviado con éxito</h2>
-        <p className="text-md sm:text-lg pr-8 text-gray-600">Gracias por contactarme, te responderé lo antes posible.</p>
+        <p className="text-md sm:text-lg pr-8 text-gray-600">Gracias por contactarnos, te responderemos lo antes posible.</p>
       </div>
     </div>
   );

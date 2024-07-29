@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "../firebase";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, signOut } from "../firebase";
 import Logo from '../assets/imgs/logos/logo.png';
+import ModalUser from '../components/ModalUser';
 
 const Registro = () => {
   const auth = getAuth();
@@ -16,6 +17,7 @@ const Registro = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const redirectToLogin = () => {
     window.location.href = '/login';
@@ -27,9 +29,9 @@ const Registro = () => {
   };
 
   const isValidPassword = (password) => {
-    const passwordRegex = /^(?=.*\d)(?=.*[A-Z])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const passwordRegex = /^.{6,}$/;
     return passwordRegex.test(password);
-  };
+  };  
 
   const handleRegister = async () => {
     setNameError('');
@@ -56,7 +58,7 @@ const Registro = () => {
       setPasswordError('Ingrese una contraseña.');
       hasError = true;
     } else if (!isValidPassword(password)) {
-      setPasswordError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.');
+      setPasswordError('La contraseña debe tener al menos 6 caracteres.');
       hasError = true;
     }
 
@@ -75,17 +77,18 @@ const Registro = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      console.log('Usuario creado con éxito:', user);
 
-      // Guardar el nombre de usuario
+      setShowSuccessModal(true);
+
+      // Guardar nombre de usuario
       await updateProfile(user, { displayName: name });
+
+      // Cerrar sesión después de registrar usuario
+      await signOut(auth);
       
-      setName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-  
-      redirectToLogin();
+      setTimeout(() => {
+        redirectToLogin();
+      }, 2000);
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('El correo electrónico ya está en uso.');
@@ -97,14 +100,14 @@ const Registro = () => {
 
   return (
     <section id='registro'>
-      <img src={Logo} alt="Logo de Levrone" className="h-32 w-32 m-auto mt-8" />
+      <img src={Logo} alt="Logo de LEVRONE" className="h-32 w-32 m-auto mt-8" />
 
       <main className="flex justify-center items-center mt-6">
         <div className="border shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-3/4 lg:w-1/3">
-          <h2 className="text-2xl mb-4 text-center">Registro</h2>
+          <h1 className="text-2xl mb-4 text-center">Registro</h1>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">Nombre Completo</label>
-            <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${nameError && 'border-red-500'}`} id="nombre" type="text" placeholder="Juán Pérez" value={name} onChange={(e) => setName(e.target.value)} />
+            <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${nameError && 'border-red-500'}`} id="nombre" type="text" placeholder="Juan Pérez" value={name} onChange={(e) => setName(e.target.value)} />
             {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
           </div>
           <div className="mb-4">
@@ -113,7 +116,7 @@ const Registro = () => {
             {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
           </div>
           <div className="mb-4 relative">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Contraseña</label>
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Contraseña <span className='text-xs text-gray-700'>(mínimo 6 caracteres)</span></label>
             <div className="relative">
               <input className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${passwordError && 'border-red-500'}`} id="password" type={showPassword ? "text" : "password"} placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} />
               <button className="absolute top-3 right-4" onClick={() => setShowPassword(!showPassword)}>
@@ -134,10 +137,14 @@ const Registro = () => {
           </div>
           <div>
             <button className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleRegister}>Registrarse</button>
-            <p className="text-sm mt-2 text-center">¿Ya tienes una cuenta? <Link to={`/login`} className='text-blue-500 underline hover:text-blue-400'>Iniciar sesión</Link></p>
+            <p className="text-sm mt-2 text-center">¿Ya tenés una cuenta? <Link to={`/login`} className='text-blue-500 underline hover:text-blue-400'>Iniciar sesión</Link></p>
           </div>
         </div>
       </main>
+
+      {showSuccessModal && (
+        <ModalUser onClose={() => setShowSuccessModal(false)} title="¡Registro exitoso!" message="¡Bienvenido a nuestro sitio!" />
+      )}
     </section>
   );
 };

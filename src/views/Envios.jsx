@@ -35,23 +35,17 @@ const Envios = () => {
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         <div className='lg:px-12 p-8'>
           <h3 className='text-xl sm:text-2xl mb-8'>¿Cómo nos manejamos?</h3>
-          <p className='text-gray-500 mb-8'>En Levrone, trabajamos con Correo Argentino, el cual facilita la entrega de productos a todo el país. Nuestro objetivo principal es que los productos lleguen en tiempo y forma a todos nuestros clientes, dejándolos así satisfechos con nuestros servicios de primera calidad. También ofrecemos una promoción, en la cual si realizas una compra mayor a $100.000, ¡el envío es totalmente gratis!</p>
+          <p className='text-gray-500 mb-8'>En LEVRONE, trabajamos con Correo Argentino, el cual facilita la entrega de productos a todo el país. Nuestro objetivo principal es que los productos lleguen en tiempo y forma a todos nuestros clientes, dejándolos así satisfechos con nuestros servicios de primera calidad. También ofrecemos una promoción, en la cual si realizas una compra mayor a $100.000, ¡el envío es totalmente gratis!</p>
 
           <h3 className='text-xl sm:text-2xl mb-8'>¿Cómo devuelvo un producto?</h3>
           <h4 className='text-lg sm:text-xl mb-4'>1. Pedí la devolución</h4>
-          <p className='text-gray-500 mb-4'>Para devolver un producto, buscá la opción “Devolver gratis” que aparece en el registro de compras en tu perfil. Allí deberás especificar el motivo de la devolución y luego comenzaremos con el proceso del mismo. Una vez realizado esto, el trámite debería aparecerte en proceso, y a partir de ese momento tendrás 7 días hábiles para enviar el paquete.</p>
+          <p className='text-gray-500 mb-4'>Para devolver un producto, deberás comunicarte con nosotros vía <a href="https://wa.me/+5491133501860" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:text-blue-500 underline'>WhatsApp</a>. Allí deberás especificar el motivo de la devolución y luego comenzaremos con el proceso de la misma.</p>
 
-          <h4 className='text-lg sm:text-xl mb-4'>2. Prepará el paquete para enviarlo</h4>
-          <p className='text-gray-500 mb-4'>Antes de preparar el paquete, revisá que el producto esté en las mismas condiciones que lo recibiste, sin usar y con todos sus accesorios, ya que de otra forma no realizaremos la devolución de dinero. Si compraste más de una unidad y te llego en un mismo paquete, deberás guardar todo en el mismo paquete al devolverlo. Luego, seguí estos pasos:</p>
-          <ol className='border-l border-orange-600'>
-            <li className='text-gray-500 mb-2 ml-4'>1. Guardá el producto en su envoltorio original.</li>
-            <li className='text-gray-500 mb-2 ml-4'>2. Imprimí la etiqueta que te dimos y pegala en el paquete.</li>
-            <li className='text-gray-500 mb-8 ml-4'>3. Lleva el paquete a la sucursal de correo más cercana.</li>
-          </ol>
+          <h4 className='text-lg sm:text-xl mb-4'>2. Devolución del producto</h4>
+          <p className='text-gray-500 mb-8'>Antes de preparar el paquete, revisá que el producto esté en las mismas condiciones que lo recibiste, sin usar y con todos sus accesorios, ya que de otra forma no realizaremos la devolución de dinero. Si compraste más de una unidad y te llegó en un mismo paquete, deberás guardar todo en el mismo paquete al devolverlo. A partir de ese momento, tendrás 7 días hábiles para entregar el paquete a la sucursal de correo más cercana.</p>
 
           <h4 className='text-lg sm:text-xl mb-4'>3. Devolución del dinero</h4>
-          <p className='text-gray-500 mb-8'>Haremos el reembolso 3 días hábiles después de que llegue el producto, una vez que revisemos si cumple con las políticas de devolución. Sin embargo, algunas veces podemos hacer el reembolso ni bien entregás el producto, para que tengas el dinero más rápido.
-          Una vez que hagamos el reembolso, vas a ver todos los detalles sobre el monto, lugar y día de acreditación del dinero desde el registro de compras en tu perfil. </p>
+          <p className='text-gray-500 mb-8'>Haremos el reembolso 3 días hábiles después de que llegue el producto, una vez que revisemos si cumple con las políticas de devolución. Sin embargo, algunas veces podemos hacer el reembolso ni bien entregás el producto, para que tengas tu dinero más rápido.</p>
           
           <h3 className='text-xl sm:text-2xl mb-8'>Preguntas frecuentes</h3>
           
@@ -66,11 +60,11 @@ const Envios = () => {
           </div>
           <div className='border-b'>
             <button className={`flex items-center justify-between w-full py-8 sm:text-lg text-gray-800 ${openIndex === 1 ? 'open' : ''}`} onClick={() => handleToggle(1)}>
-              <span className='pr-4 text-left'>¿Dónde recibo mis paquetes?</span>
+              <span className='pr-4 text-left'>¿Dónde recibo mi pedido?</span>
               <BsChevronDown className={openIndex === 1 ? 'rotate' : 'rotate'} />
             </button>
             <div style={{ height: openIndex === 1 ? height : 0, overflow: 'hidden', transition: 'height 0.3s ease' }}>
-              <p className='text-gray-500 pr-10 pb-2 acordeon' id={`acordeon-1`}>Recibirás tus paquetes en la sucursul de Correo Argentino más cercana a tu domicilio, según la que hayas seleccionado.</p>
+              <p className='text-gray-500 pr-10 pb-2 acordeon' id={`acordeon-1`}>Recibirás tu pedido en la dirección del domicilio que hayas seleccionado al momento de realizar la compra.</p>
             </div>
           </div>
           <div className='border-b'>
@@ -93,11 +87,11 @@ const Envios = () => {
           </div>
           <div className='border-b'>
             <button className={`flex items-center justify-between w-full py-8 sm:text-lg text-gray-800 ${openIndex === 4 ? 'open' : ''}`} onClick={() => handleToggle(4)}>
-              <span className='pr-4 text-left'>¿Puedo cancelar una devolución?</span>
+              <span className='pr-4 text-left'>¿Puedo cancelar un pedido?</span>
               <BsChevronDown className={openIndex === 4 ? 'rotate' : 'rotate'} />
             </button>
             <div style={{ height: openIndex === 4 ? height : 0, overflow: 'hidden', transition: 'height 0.3s ease' }}>
-              <p className='text-gray-500 pr-10 pb-2 acordeon' id={`acordeon-4`}>Sí, es posible. Si crees que te equivocaste al inicializar el reclamo, podés darle de baja al instante antes de llevar el producto a la sucursal de Correo Argentino. Dale al botón de "Cancelar reclamo" en el registro de compras en tu perfil y confirmalo.</p>
+              <p className='text-gray-500 pr-10 pb-2 acordeon' id={`acordeon-4`}>Sí, es posible. Deberás comunicarte con nosotros vía <a href="https://wa.me/+5491133501860" target="_blank" rel="noopener noreferrer" className='text-blue-600 hover:text-blue-500 underline'>WhatsApp</a>. Allí deberás especificar el motivo de la cancelación y luego comenzaremos con el proceso de la misma.</p>
             </div>
           </div>
         </div>

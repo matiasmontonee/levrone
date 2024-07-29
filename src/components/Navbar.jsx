@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector  } from 'react-redux';
 import { eliminarProductoDelCarrito, vaciarCarrito, incrementarCantidadProducto, decrementarCantidadProducto } from '../store';
-import { FaTimes, FaHome, FaUser, FaDumbbell, FaPhoneAlt, FaBars, FaShoppingCart, FaShippingFast, FaQuestionCircle, FaTrash, FaArrowRight, FaShoppingBag, FaNewspaper, FaPlus, FaMinus, FaComments, FaTrophy } from 'react-icons/fa';
+import { FaTimes, FaHome, FaUser, FaDumbbell, FaPhoneAlt, FaBars, FaShoppingCart, FaShippingFast, FaQuestionCircle, FaTrash, FaArrowRight, FaShoppingBag, FaNewspaper, FaPlus, FaMinus, FaComments, FaTrophy, FaUserPlus } from 'react-icons/fa';
 import Logo from '../assets/imgs/logos/logo.png';
 import { useAuth } from '../hooks/useAuth';
 
@@ -75,10 +75,6 @@ const Navbar = () => {
     dispatch(eliminarProductoDelCarrito(id));
   };
 
-  // useEffect(() => {
-  //   console.log("Usuario autenticado:", user);
-  // }, [user]);
-
   const incrementQuantity = (id) => {
     dispatch(incrementarCantidadProducto(id));
   };
@@ -99,7 +95,7 @@ const Navbar = () => {
       {/* LOGO */}
       <div className="flex items-center hidden lg:flex">
         <a href="/">
-          <img src={Logo} alt="Logo de Levrone" className="h-16 ml-2 logo" />
+          <img src={Logo} alt="Logo de LEVRONE" className="h-16 ml-2 logo" />
         </a>
       </div>
       {/* OPCIONES */}
@@ -126,7 +122,7 @@ const Navbar = () => {
         <div className="relative" ref={userDropdownRef}>
           <button onClick={toggleUserDropdown}><FaUser className='w-7 h-7 logo mr-3' /></button>
           {isUserDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-96 bg-white border rounded-md shadow-lg">
+            <div className={`absolute right-0 mt-2 ${isAuthenticated ? 'w-96' : 'w-32'} bg-white border rounded-md shadow-lg`}>
               {isAuthenticated ? ( // Si el usuario está autenticado 
                 <>
                   <Link to="/compras" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Mis compras</Link>
@@ -136,6 +132,7 @@ const Navbar = () => {
               ) : ( // Si no lo está
                 <>
                   <Link to="/login" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Iniciar sesión</Link>
+                  <Link to="/registro" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Registrarse</Link>
                 </>
               )}
             </div>
@@ -155,7 +152,7 @@ const Navbar = () => {
       {/* LOGO */}
       <div className="lg:hidden">
         <a href="/">
-          <img src={Logo} alt="Logo de Levrone" className="py- h-14 logo" />
+          <img src={Logo} alt="Logo de LEVRONE" className="py- h-14 logo" />
         </a>
       </div>
 
@@ -180,7 +177,7 @@ const Navbar = () => {
         <div className="flex flex-col items-start p-4 pt-0">
           <div className="flex justify-between items-center w-full">
             <p className='text-lg text-white p-4 pt-6 pb-6 pl-0'>Menú</p>
-            <span className='text-white text-lg mt-1 cursor-pointer logo' onClick={toggleMenu}><FaTimes /></span>
+            <span className='text-white text-lg mt-1 cursor-pointer hover:text-red-500' onClick={toggleMenu}><FaTimes /></span>
           </div>
           <Link to={`/`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
             <FaHome className="inline-block mr-2 mb-1.5" />Inicio
@@ -216,9 +213,14 @@ const Navbar = () => {
               </button>
             </>
           ) : ( // Si no lo está
-            <Link to={`/login`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
-              <FaUser className="inline-block mr-2 mb-1.5" />Iniciar Sesión
-            </Link>
+            <>
+              <Link to={`/login`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+                <FaUser className="inline-block mr-2 mb-1.5" />Iniciar Sesión
+              </Link>
+              <Link to={`/registro`} className="nav-link text-lg text-white border-b border-white p-6 pl-0 w-full" onClick={toggleMenu}>
+                <FaUserPlus className="inline-block mr-2 mb-1.5" />Registrarse
+              </Link>
+            </>
           )}
         </div>
       </div>
@@ -264,10 +266,10 @@ const Navbar = () => {
             <>
               <div className='flex flex-col sm:flex-row justify-between items-center mt-2 mb-4 sm:mb-6 w-full text-white'>
                 <Link to="/productos" className='bg-gray-500 hover:bg-gray-600 p-2 px-4 rounded-full sm:mb-0 mb-4' onClick={toggleCart}><button>Ver más productos</button></Link>
-                <p className='hidden sm:block text-black font-bold'>Total: ${precioTotalCarrito}</p>
+                <p className='hidden sm:block text-black font-bold'>Subtotal: ${precioTotalCarrito}</p>
                 <button onClick={() => dispatch(vaciarCarrito())} className='bg-gray-500 hover:bg-gray-600 p-2 px-4 rounded-full'>Vaciar carrito</button>
               </div>
-              <p className='sm:hidden text-black font-bold mb-4 mx-auto'>Total: ${precioTotalCarrito}</p>
+              <p className='sm:hidden text-black font-bold mb-4 mx-auto'>Subtotal: ${precioTotalCarrito}</p>
               <Link to="/checkout" className='w-full flex justify-center items-center text-white font-bold bg-orange-600 hover:bg-orange-500 p-2 px-4 rounded-full' onClick={toggleCart}><button>Continuar con la compra</button><FaArrowRight className='ml-2' /></Link>
             </>
           )}

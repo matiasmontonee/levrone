@@ -2,15 +2,14 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 
-const RutaProtegida = ({ children }) => {
-  const { user } = useAuth();
+const RutaProtegida = ({ element: Element }) => {
+  const { isAuthenticated } = useAuth();
 
-  if (!user) { // Redirige al login si el usuario no está autenticado
+  if (!isAuthenticated) { // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
     return <Navigate to="/login" />;
   }
 
-  // Renderiza el componente hijo si el usuario está autenticado
-  return children;
+  return <Element />;
 };
 
 export default RutaProtegida;

@@ -29,6 +29,10 @@ const RegistroCompras = () => {
 
   useEffect(() => {
     const fetchCompras = async () => {
+      if (!user) {
+        setIsLoading(false);
+        return;
+      }
 
       const comprasQuery = query(collection(db, 'ordenes'), where('formData.email', '==', user.email));
 
@@ -50,6 +54,19 @@ const RegistroCompras = () => {
     fetchCompras();
   }, [user]);
 
+  const getEstadoCompra = (timestamp) => {
+    const currentTime = new Date();
+    const purchaseTime = timestamp.toDate();
+    const timeDifference = currentTime - purchaseTime;
+    const hoursDifference = timeDifference / (1000 * 60 * 60);
+
+    if (hoursDifference < 24) {
+      return <span className='text-orange-500 font-semibold'>En proceso</span>;
+    } else {
+      return <span className='text-green-500 font-semibold'>Entregado</span>;
+    }
+  };
+
   if (isLoading) {
     return <div className="text-center my-8">Cargando...</div>;
   }
@@ -67,7 +84,9 @@ const RegistroCompras = () => {
             <div key={compra.id} className="border-b-2 mb-8 pb-4">
               <p className='text-lg font-bold'>Pedido #{compra.id}</p>
               <p className='text-lg font-bold'>Total: ${compra.precioTotalCarrito}</p>
-              <p className="text-gray-600 my-2">{new Date(compra.timestamp.toDate()).toLocaleString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })} - <span className='text-green-500 font-semibold'>Entregado</span></p>
+              <p className="text-gray-600 my-2">
+                {new Date(compra.timestamp.toDate()).toLocaleString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'})} - {getEstadoCompra(compra.timestamp)}
+              </p>
               <div>
                 {compra.carrito.map((producto, index) => (
                   <div key={index} className="flex items-center sm:flex-row flex-col mb-4">

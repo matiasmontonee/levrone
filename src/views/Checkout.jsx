@@ -10,6 +10,7 @@ const Checkout = () => {
   const [redirectToConfirmation, setRedirectToConfirmation] = useState(false);
   const carrito = useSelector(state => state.carrito);
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
+  const [shippingCost, setShippingCost] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const removeFromCart = (id) => {
@@ -52,9 +53,53 @@ const Checkout = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    
+    if (name === 'postal') {
+      let postalValue = value.replace(/\D/g, '');
+      if (postalValue.length > 4) {
+        postalValue = postalValue.slice(0, 4);
+      }
+
+      if (postalValue.length > 0 && postalValue[0] === '0') { // Si empieza con 0 se limpia el valor
+        postalValue = '';
+      }
+      setFormData({
+        ...formData,
+        [name]: postalValue
+      });
+
+      // Calcular envío en base al código postal
+      const postalCode = parseInt(postalValue);
+      if (postalCode >= 1000 && postalCode <= 2000) {
+        setShippingCost(4000);
+      } else if (postalCode >= 2000 && postalCode <= 4000) {
+        setShippingCost(6000);
+      } else if (postalCode >= 4000 && postalCode <= 6000) {
+        setShippingCost(8000);
+      } else if (postalCode >= 6000 && postalCode <= 9999) {
+        setShippingCost(10000);
+      } else {
+        setShippingCost(0);
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+  };
+
+  const handleVencimientoChange = (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length > 4) {
+      value = value.slice(0, 4);
+    }
+    if (value.length > 2) {
+      value = value.slice(0, 2) + '/' + value.slice(2);
+    }
     setFormData({
       ...formData,
-      [name]: value
+      vencimiento: value
     });
   };
 
@@ -71,6 +116,9 @@ const Checkout = () => {
       } else if ((key === 'nombre' || key === 'apellido' || key === 'provincia' || key === 'localidad' || key === 'calle' || key === 'tarjeta') && formData[key].length < 2) {
         newErrors[key] = `El campo ${fieldLabels[key]} debe tener al menos 2 caracteres.`;
         hasError = true;
+      } else if (key === 'postal' && formData[key].length !== 4) {
+        newErrors[key] = `El campo ${fieldLabels[key]} debe tener 4 dígitos.`;
+        hasError = true;
       } else if ((key === 'calleNum' || key === 'postal' || key === 'cvv') && (formData[key].length < 1 || formData[key].length > 4)) {
         newErrors[key] = `El campo ${fieldLabels[key]} debe tener entre 1 y 4 caracteres.`;
         hasError = true;
@@ -86,7 +134,14 @@ const Checkout = () => {
           newErrors[key] = `El campo ${fieldLabels[key]} debe tener un formato válido.`;
           hasError = true;
         }
-      } else {
+      } else if (key === 'vencimiento') {
+        const [month, year] = formData[key].split('/');
+        if (formData[key].replace(/\D/g, '').length !== 4 || !month || !year || !(parseInt(month) >= 1 &&   parseInt(month) <= 12) || !(parseInt(year) >= 24 && parseInt(year) <= 34)) {
+          newErrors[key] = `El campo ${fieldLabels[key]} debe tener un formato válido (MM/AA).`;
+          hasError = true;
+        }
+      }
+       else {
         newErrors[key] = '';
       }
     });
@@ -126,7 +181,7 @@ const Checkout = () => {
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         {carrito.length === 0 ? (
             <div className="text-center my-8 mx-4">
-              <p className='mb-4'>Tu carrito está vacío. Agrega productos antes de continuar con el proceso de pago.</p>
+              <p className='mb-4'>Tu carrito está vacío. Agregá productos antes de continuar con el proceso de pago.</p>
               <Link to="/productos" className='text-white bg-orange-600 hover:bg-orange-500 p-1.5 lg:p-2.5 pr-2 lg:pr-4 pl-2 lg:pl-4 rounded-full'><button>Ver productos</button></Link>
             </div>
           ) : (
@@ -174,7 +229,7 @@ const Checkout = () => {
 
                   <div className="w-full lg:w-1/2 mb-4 lg:pr-2">
                     <label htmlFor="postal" className='block mb-2 font-semibold'>Código postal</label>
-                    <input type='number' id='postal' name='postal' value={formData.postal} onChange={handleInputChange} className='border border-gray-300 rounded-md py-2 px-4 block w-full' />
+                    <input type='text' id='postal' name='postal' value={formData.postal} onChange={handleInputChange} className='border border-gray-300 rounded-md py-2 px-4 block w-full' />
                     {errors.postal && <p className="text-red-500 mt-1">{errors.postal}</p>}
                   </div>
 
@@ -213,8 +268,8 @@ const Checkout = () => {
                   </div>
 
                   <div className="w-full lg:w-1/2 mb-4 lg:pr-2">
-                    <label htmlFor="vencimiento" className='block mb-2 font-semibold'>Fecha de vencimiento</label>
-                    <input type='date' id='vencimiento' name='vencimiento' value={formData.vencimiento} onChange={handleInputChange} className='border border-gray-300 rounded-md py-2 px-4 block w-full' />
+                    <label htmlFor="vencimiento" className='block mb-2 font-semibold'>Fecha de vencimiento <span className='text-sm text-gray-400'>(MM/AA)</span></label>
+                    <input type='text' id='vencimiento' name='vencimiento' value={formData.vencimiento} onChange={handleVencimientoChange} className='border border-gray-300 rounded-md py-2 px-4 block w-full' />
                     {errors.vencimiento && <p className="text-red-500 mt-1">{errors.vencimiento}</p>}
                   </div>
 
@@ -257,8 +312,16 @@ const Checkout = () => {
                 </div>
               )}
               <div className='flex justify-between font-bold'>
+                <p>Subtotal</p>
+                <p>${precioTotalCarrito}</p>
+              </div>
+              <div className='flex justify-between font-bold'>
+                <p>Envío</p>
+                <p>${shippingCost}</p>
+              </div>
+              <div className='flex justify-between font-bold'>
                 <p>Total</p>
-                <p> ${precioTotalCarrito}</p>
+                <p>${precioTotalCarrito + shippingCost}</p>
               </div>
             </div>
           </div>

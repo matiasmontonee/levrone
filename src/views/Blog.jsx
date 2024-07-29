@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
 
 const Blog = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [posts, setPosts] = useState([]);
 
@@ -33,8 +34,10 @@ const Blog = () => {
         const postsSnapshot = await getDocs(postsCollection);
         const postsData = postsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setPosts(postsData);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching blog posts:", error);
+        setIsLoading(false);
       }
     };
 
@@ -50,20 +53,24 @@ const Blog = () => {
         </div>
         
         <h1 className='text-4xl text-center mb-4 mx-4 font-bold'>¡Bienvenidos a nuestro blog!</h1>
-        <p className='text-lg text-center mx-4'>Aquí podrás encontrar toda la información que necesites sobre el fitness y la nutrición.</p>
+        <p className='text-lg text-center mx-4'>Acá podrás encontrar toda la información que necesites sobre el fitness y la nutrición.</p>
 
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 pt-4">
-          {posts.map(post => (
-            <Link to={`/blog/${post.id}`} key={post.id}>
-              <div key={post.id} className="bg-white p-4 rounded-lg shadow-md blog-hover">
-                <img src={post.portada} alt={post.titulo} className="w-full h-54 sm:h-64 sm:object-cover rounded-md mb-4" />
-                <h2 className="text-xl font-bold mb-2">{post.titulo}</h2>
-                <h3 className="text-lg mb-2">{post.subtitulo}</h3>
-                <p className="font-semibold">{post.serverTimestamp && post.serverTimestamp.toDate().toLocaleDateString()}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {isLoading ? (
+          <p className="text-center text-xl my-8">Cargando noticias...</p>
+        ) : (
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 pt-4">
+            {posts.map(post => (
+              <Link to={`/blog/${post.id}`} key={post.id}>
+                <div key={post.id} className="bg-white p-4 rounded-lg shadow-md blog-hover">
+                  <img src={post.portada} alt={post.titulo} className="w-full h-54 sm:h-64 sm:object-cover rounded-md mb-4" />
+                  <h2 className="text-xl font-bold mb-2">{post.titulo}</h2>
+                  <h3 className="text-lg mb-2">{post.subtitulo}</h3>
+                  <p className="font-semibold">{post.serverTimestamp && post.serverTimestamp.toDate().toLocaleDateString()}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
     </section>
   );

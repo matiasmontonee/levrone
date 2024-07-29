@@ -64,7 +64,7 @@ const BlogDetalles = () => {
               <p className="text-lg text-gray-800">{post.descripcion}</p>
             </>
           ) : (
-            <p className='text-2xl text-center p-8'>Cargando post...</p>
+            <p className='text-2xl text-center p-8'>Cargando noticia...</p>
           )}
         </div>
       </main>

@@ -20,6 +20,7 @@ const Inicio = () => {
   const images = [Banner, Banner2, Banner3, Banner4, Banner5];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [productos, setProductos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [productosAgregados, setProductosAgregados] = useState({});
   const dispatch = useDispatch();
@@ -33,8 +34,10 @@ const Inicio = () => {
         const indicesEspecificos = [1, 5, 9, 11, 15, 42];
         const productosEspecificos = indicesEspecificos.map(index => productosData[index]);
         setProductos(productosEspecificos);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
+        setIsLoading(false);
       }
     };
 
@@ -129,38 +132,42 @@ const Inicio = () => {
         {/* PRODUCTOS */}
         <h1 className='mt-8 text-center text-2xl sm:text-3xl'>Productos con descuento</h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-8">
-          {productos.map(producto => (
-            <div key={producto?.id} className="w-80 mx-auto mb-8">
-              <div className="h-full border border-white hover:border-orange-600 rounded-lg overflow-hidden bg-white flex flex-col justify-between">
-                <Link to={`/productos/${producto?.id}`} className="flex flex-col h-full">
-                  <div className="relative">
-                    <img src={producto?.imagen} alt={producto?.nombre} className="w-full h-64" />
-                    <div className="absolute top-0 left-0 m-2 p-1 sm:p-2 bg-black bg-opacity-90 text-white rounded-xl">
-                      <p className="text-center px-2">{producto?.porcentaje}% OFF</p>
+        {isLoading ? (
+          <p className="text-center text-xl my-8">Cargando productos...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 mt-8">
+            {productos.map(producto => (
+              <div key={producto?.id} className="w-80 mx-auto mb-8">
+                <div className="h-full border border-white hover:border-orange-600 rounded-lg overflow-hidden bg-white flex flex-col justify-between">
+                  <Link to={`/productos/${producto?.id}`} className="flex flex-col h-full">
+                    <div className="relative">
+                      <img src={producto?.imagen} alt={producto?.nombre} className="w-full h-64" />
+                      <div className="absolute top-0 left-0 m-2 p-1 sm:p-2 bg-black bg-opacity-90 text-white rounded-xl">
+                        <p className="text-center px-2">{producto?.porcentaje}% OFF</p>
+                      </div>
+                    </div>
+                  </Link>
+                  <div className="p-4 flex flex-col justify-between flex-grow">
+                    <p className="text-sm text-orange-600 font-semibold">{producto?.marca}</p>
+                    <div className='flex flex-col justify-between flex-grow'>
+                      <p className="font-semibold">{producto?.nombre}</p>
+                      <p className='text-gray-500 line-through mt-4'>${producto?.descuento}</p>
+                    </div>
+                    <div className='flex justify-between'>
+                      <p className="text-xl font-semibold">${producto?.precio}</p>
+                      <Link to={`/productos/${producto?.id}`}>
+                        <button className='text-2xl text-orange-600 hover:text-orange-500'><FaEye /></button>
+                      </Link>
                     </div>
                   </div>
-                </Link>
-                <div className="p-4 flex flex-col justify-between flex-grow">
-                  <p className="text-sm text-orange-600 font-semibold">{producto?.marca}</p>
-                  <div className='flex flex-col justify-between flex-grow'>
-                    <p className="font-semibold">{producto?.nombre}</p>
-                    <p className='text-gray-500 line-through mt-4'>${producto?.descuento}</p>
-                  </div>
-                  <div className='flex justify-between'>
-                    <p className="text-xl font-semibold">${producto?.precio}</p>
-                    <Link to={`/productos/${producto?.id}`}>
-                      <button className='text-2xl text-orange-600 hover:text-orange-500'><FaEye /></button>
-                    </Link>
-                  </div>
+                  <button className={`mt-4 py-2 px-4 text-white font-bold rounded-md transition-colors duration-300 ${productosAgregados[producto.id] ? 'bg-green-500 hover:bg-green-400' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={(event) => agregarAlCarrito(producto, event)}>
+                    {productosAgregados[producto.id] ? 'Agregado al carrito' : 'Agregar al carrito'}
+                  </button>
                 </div>
-                <button className={`mt-4 py-2 px-4 text-white font-bold rounded-md transition-colors duration-300 ${productosAgregados[producto.id] ? 'bg-green-500 hover:bg-green-400' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={(event) => agregarAlCarrito(producto, event)}>
-                  {productosAgregados[producto.id] ? 'Agregado al carrito' : 'Agregar al carrito'}
-                </button>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div className='flex justify-center mb-8'>
           <Link to={"/productos"} className="border font-bold text-gray-100 bg-orange-600 hover:bg-orange-500 md:px-8 px-4 md:py-3 py-2 rounded-full">Ver todos los productos</Link>
@@ -185,7 +192,7 @@ const Inicio = () => {
               <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 rounded-xl">
                 <div className="text-white text-center">
                   <p className='text-2xl sm:text-4xl p-4'>¡Envíos gratis en compras superiores a $100.000!</p>
-                  <p className='text-md sm:text-xl text-gray-300 px-4'>No aplica para productos en promoción.</p>
+                  <p className='text-md sm:text-xl text-gray-300 px-4'>Aplica para todos los productos disponibles.</p>
                 </div>
               </div>
             </div>
@@ -209,7 +216,7 @@ const Inicio = () => {
             <img src={Icon1} alt="Card" className="w-48 h-32 mx-auto" />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold mb-2">Medios de pago</h3>
-              <p className="text-gray-800">Podés pagar con tarjeta de débito/crédito o en efectivo de forma segura. Tu dinero está protegido con Mercado Pago.</p>
+              <p className="text-gray-800">Podés pagar con tarjeta de débito o crédito de forma segura. También tenés la opción de pagar con Mercado Pago.</p>
             </div>
           </div>
           <div className="sm:mb-8 bg-white">
@@ -223,7 +230,7 @@ const Inicio = () => {
             <img src={Icon3} alt="Card" className="w-48 h-32 mx-auto" />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold mb-2">Compra protegida</h3>
-              <p className="text-gray-800">Tú compra está segura, podés realizarla con total tranquilidad, te lo garantizamos. ¡Lo que compras es lo que llega!</p>
+              <p className="text-gray-800">Tu compra está segura, podés realizarla con total tranquilidad, te lo garantizamos. ¡Lo que comprás es lo que llega!</p>
             </div>
           </div>
         </div>

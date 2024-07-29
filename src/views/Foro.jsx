@@ -64,7 +64,7 @@ const Foro = () => {
     <section id='foro'>
       <main>
         <h1 className='text-3xl sm:text-4xl text-center my-4 mx-4 font-bold'>¡Bienvenidos a nuestro foro!</h1>
-        <p className='sm:text-lg text-center mx-4'>Aquí podrás encontrar y compartir toda la información que necesites sobre el fitness y la nutrición.</p>
+        <p className='sm:text-lg text-center mx-4'>Acá podrás encontrar y compartir toda la información que necesites sobre el fitness y la nutrición.</p>
 
         <div className='flex justify-center mt-4'>
           <Link to='/post'>

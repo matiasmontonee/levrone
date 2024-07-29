@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { db, collection, getDocs, query, where, orderBy } from '../firebase';
 import { FaChevronDown, FaHome, FaSearch, FaShippingFast, FaEye } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
@@ -9,10 +9,12 @@ const Productos = () => {
   const [productos, setProductos] = useState([]);
   const [filtro, setFiltro] = useState('');
   const [orden, setOrden] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [busqueda, setBusqueda] = useState('');
   const [breadcrumb, setBreadcrumb] = useState([]);
   const [productosAgregados, setProductosAgregados] = useState({});
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -37,8 +39,10 @@ const Productos = () => {
         const productosSnapshot = await getDocs(productosQuery);
         const productosData = productosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setProductos(productosData);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error al obtener los productos:", error);
+        setIsLoading(false);
       }
     };
 
@@ -64,8 +68,18 @@ const Productos = () => {
     };
   }, []);
 
-  const handleFiltroChange = event => {
-    setFiltro(event.target.value);
+  const handleFiltroChange = event => { // cambia la url si se selecciona alguna opción del select
+    const selectedFiltro = event.target.value;
+    setFiltro(selectedFiltro);
+  
+    const searchParams = new URLSearchParams(location.search);
+    if (selectedFiltro) {
+      searchParams.set('tipo', selectedFiltro);
+    } else {
+      searchParams.delete('tipo');
+    }
+  
+    navigate({ search: searchParams.toString() });
   };
 
   const handleBusquedaChange = event => {
@@ -123,7 +137,7 @@ const Productos = () => {
           <Link to="/productos" className='mr-1.5 text-gray-800'>/ Productos</Link>
           {breadcrumb.map((tipo, index) => (
             <p key={index} className='mr-1.5 text-gray-800'>
-              <Link to={`/productos?tipo=${tipo}`} className='text-gray-800'>/ {capitalizeFirstLetter(tipo)} /</Link>
+              <Link to={`/productos?tipo=${tipo}`} className='text-gray-800'>/ {capitalizeFirstLetter(tipo)}</Link>
             </p>
           ))}
         </div>
@@ -164,55 +178,59 @@ const Productos = () => {
           </span>
         </div>
 
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-8">
-          {productosFiltrados.map(producto => (
-            <div key={producto.id} className="h-full bg-white border border-white rounded-lg hover:border-orange-600 cursor-pointer flex flex-col justify-between">
-              <Link to={`/productos/${producto.id}`} className='px-4'>
-                <div className="relative">
-                  <img src={producto.imagen} alt={producto.nombre} className="w-48 h-48 mb-2 mx-auto relative" />
-                  {producto.porcentaje && (
-                    <div className="absolute top-0 right-0 p-1 bg-black bg-opacity-90 text-white rounded-xl">
-                      <p className="px-2">{producto.porcentaje}% OFF</p>
-                    </div>
-                  )}
-                  {producto.envio && (
-                    <div className="absolute top-0 right-0 p-1 bg-black bg-opacity-90 text-white rounded-xl">
-                      <div className='flex items-center px-2'>
-                        <FaShippingFast className='text-green-500 mb-0.5 mr-2' />
-                        <p className="text-green-500 font-bold">{producto.envio}</p>
+        {isLoading ? (
+          <p className="text-center text-xl my-8">Cargando productos...</p>
+        ) : (
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-8">
+            {productosFiltrados.map(producto => (
+              <div key={producto.id} className="h-full bg-white border border-white rounded-lg hover:border-orange-600 cursor-pointer flex flex-col justify-between">
+                <Link to={`/productos/${producto.id}`} className='px-4'>
+                  <div className="relative">
+                    <img src={producto.imagen} alt={producto.nombre} className="w-48 h-48 mb-2 mx-auto relative" />
+                    {producto.porcentaje && (
+                      <div className="absolute top-0 right-0 p-1 bg-black bg-opacity-90 text-white rounded-xl">
+                        <p className="px-2">{producto.porcentaje}% OFF</p>
                       </div>
-                    </div>
+                    )}
+                    {producto.envio && (
+                      <div className="absolute top-0 right-0 p-1 bg-black bg-opacity-90 text-white rounded-xl">
+                        <div className='flex items-center px-2'>
+                          <FaShippingFast className='text-green-500 mb-0.5 mr-2' />
+                          <p className="text-green-500 font-bold">{producto.envio}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <p className='font-bold text-orange-600 text-sm'>{producto.marca}</p>
+                  <h3 className="font-semibold mb-4">{producto.nombre}</h3>
+                </Link>
+                <div className='mt-auto flex justify-between items-center px-4'>
+                  {producto.descuento ? (
+                    <>
+                      <div className='flex items-center'>
+                        <p className="text-xl font-bold mr-2">${producto.precio}</p>
+                        <p className="text-gray-500 line-through">${producto.descuento}</p>
+                      </div>
+                      <Link to={`/productos/${producto.id}`}>
+                      <  button className='text-2xl text-orange-600 hover:text-orange-500'><FaEye /></button>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-xl font-bold">${producto.precio}</p>
+                      <Link to={`/productos/${producto.id}`}>
+                        <button className='text-2xl text-orange-600 hover:text-orange-500 carrito-icon'><FaEye /></button>
+                      </Link>
+                    </>
                   )}
                 </div>
-                <p className='font-bold text-orange-600 text-sm'>{producto.marca}</p>
-                <h3 className="font-semibold mb-4">{producto.nombre}</h3>
-              </Link>
-              <div className='mt-auto flex justify-between items-center px-4'>
-                {producto.descuento ? (
-                  <>
-                    <div className='flex items-center'>
-                      <p className="text-xl font-bold mr-2">${producto.precio}</p>
-                      <p className="text-gray-500 line-through">${producto.descuento}</p>
-                    </div>
-                    <Link to={`/productos/${producto.id}`}>
-                      <button className='text-2xl text-orange-600 hover:text-orange-500'><FaEye /></button>
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-xl font-bold">${producto.precio}</p>
-                    <Link to={`/productos/${producto.id}`}>
-                      <button className='text-2xl text-orange-600 hover:text-orange-500 carrito-icon'><FaEye /></button>
-                    </Link>
-                  </>
-                )}
+                <button className={`mt-4 py-2 px-4 text-white font-bold rounded-md transition-colors duration-300 ${productosAgregados[producto.id] ? 'bg-green-500 hover:bg-green-400' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={(event) => agregarAlCarrito(producto, event)}>
+                  {productosAgregados[producto.id] ? 'Agregado al carrito' : 'Agregar al carrito'}
+                </button>
               </div>
-              <button className={`mt-4 py-2 px-4 text-white font-bold rounded-md transition-colors duration-300 ${productosAgregados[producto.id] ? 'bg-green-500 hover:bg-green-400' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={(event) => agregarAlCarrito(producto, event)}>
-                {productosAgregados[producto.id] ? 'Agregado al carrito' : 'Agregar al carrito'}
-              </button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
     </section>
   );

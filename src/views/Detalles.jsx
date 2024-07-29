@@ -10,17 +10,22 @@ const Detalles = () => {
   const [producto, setProducto] = useState(null);
   const [codigoPostal, setCodigoPostal] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [shippingCost, setShippingCost] = useState(0);
   const [mensajeError, setMensajeError] = useState('');
   const dispatch = useDispatch();
   const [agregadoAlCarrito, setAgregadoAlCarrito] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchProducto = async () => {
       try {
         const productoDoc = await getDoc(doc(db, 'productos', id));
         if (productoDoc.exists()) {
-          setProducto({ id: productoDoc.id, ...productoDoc.data() });
+          const productoData = { id: productoDoc.id, ...productoDoc.data() };
+          setProducto(productoData);
+          setSelectedImage(productoData.imagen);
         } else {
+          console.error("Error al obtener el producto");
         }
       } catch (error) {
         console.error("Error al obtener el producto:", error);
@@ -54,10 +59,38 @@ const Detalles = () => {
   };
 
   const handleCalcularEnvio = () => {
-    if (codigoPostal.trim().length !== 4 || isNaN(codigoPostal.trim())) {
-      setMensajeError('Ingrese los de 4 números de su código postal.');
+    let trimmedPostalCode = codigoPostal.trim();
+
+    if (trimmedPostalCode.length !== 4 || isNaN(trimmedPostalCode)) {
+      setMensajeError('Ingrese un código postal válido de 4 números.');
+      setShippingCost(0);
     } else {
-      setMensajeError('');
+      if (trimmedPostalCode.charAt(0) === '0') {
+        setCodigoPostal('');
+        setMensajeError('Ingrese un código postal válido de 4 números.');
+        setShippingCost(0);
+      } else {
+        const postalCode = parseInt(trimmedPostalCode);
+
+        if (postalCode <= 999) {
+          setMensajeError('El código postal mínimo es 1000.');
+          setShippingCost(0);
+        } else {
+          setMensajeError('');
+
+          if (postalCode >= 1000 && postalCode <= 2000) {
+            setShippingCost(4000);
+          } else if (postalCode >= 2000 && postalCode <= 4000) {
+            setShippingCost(6000);
+          } else if (postalCode >= 4000 && postalCode <= 6000) {
+            setShippingCost(8000);
+          } else if (postalCode >= 6000 && postalCode <= 9999) {
+            setShippingCost(10000);
+          } else {
+            setShippingCost(0);
+          }
+        }
+      }
     }
   };
 
@@ -67,7 +100,7 @@ const Detalles = () => {
     setTimeout(() => {
       setAgregadoAlCarrito(false);
     }, 2000);
-  };  
+  };
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -91,12 +124,18 @@ const Detalles = () => {
             </>
           )}
         </div>
-        
+
         {producto ? (
           <div className='m-6'>
             <div className='flex flex-col md:flex-row justify-between'>
               <div className='border border-gray-300 rounded-lg md:w-1/2 relative'>
-                <img src={producto.imagen} alt={producto.nombre} className="w-96 h-96 mx-auto" />
+                <img src={selectedImage} alt={producto.nombre} className="w-96 h-96 mx-auto" />
+                {producto.imagen && producto.imagen2 && (
+                  <div className="flex mt-4 justify-center">
+                    <img src={producto.imagen} alt="Miniatura 1" className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen)} />
+                    <img src={producto.imagen2} alt="Miniatura 2" className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen2 ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen2)} />
+                  </div>
+                )}
                 {producto.porcentaje && (
                   <div className="absolute top-0 right-0 m-4 p-1 bg-black bg-opacity-90 text-white rounded-xl">
                     <p className="px-2">{producto.porcentaje}% OFF</p>
@@ -124,14 +163,17 @@ const Detalles = () => {
                   {agregadoAlCarrito ? 'Agregado al carrito' : 'Agregar al carrito'}
                 </button>
                 {producto.sabor && (
-                  <p className='font-bold mb-4'><span>Sabor:</span> {producto.sabor}</p> 
+                  <p className='font-bold mb-4'><span>Sabor:</span> {producto.sabor}</p>
                 )}
-                <p className='font-bold mb-2'>Calcular envío</p>
+                <p className='font-bold mb-2'>Calcular envío <span className='text-sm text-gray-700 font-normal'>(si el total de la compra es mayor a $100.000, el envío es gratis)</span></p>
                 <div className='flex items-center mb-2'>
                   <input type="number" value={codigoPostal} onChange={handleCodigoPostalChange} className='rounded-md border border-gray-400 h-10 w-48 p-2' placeholder='Código postal' />
                   <button onClick={handleCalcularEnvio} className='rounded-md p-2 ml-4 bg-orange-600 hover:bg-orange-500 text-white font-bold'>Calcular</button>
                 </div>
                 <p className="text-red-500 mb-1">{mensajeError}</p>
+                {shippingCost > 0 && (
+                  <p className="font-bold mb-2">Costo de envío: ${shippingCost}</p>
+                )}
                 <a href='https://www.correoargentino.com.ar/formularios/cpa' target='_blank' rel='noreferrer' className='flex w-48 text-gray-500 hover:text-blue-500 hover:cursor-pointer hover:underline'>
                   <p>No sé mi código postal</p>
                   <FaExternalLinkAlt className='ml-2 mt-0.5' />
@@ -150,7 +192,7 @@ const Detalles = () => {
             </div>
           </div>
         ) : (
-          <p className='text-2xl text-center p-8'>Cargando producto...</p>
+          <p className='text-2xl text-center pb-8'>Cargando producto...</p>
         )}
       </main>
     </section>

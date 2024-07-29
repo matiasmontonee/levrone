@@ -35,14 +35,14 @@ const RecuperarPassword = () => {
       setMessage('Correo de restablecimiento de contraseña enviado. Por favor revise su correo electrónico.');
       setTimeout(redirectToLogin, 5000);
     } catch (error) {
-      setEmailError('Error al enviar el correo de restablecimiento de contraseña. Por favor, inténtelo nuevamente.');
+      setEmailError('Error al enviar el correo de restablecimiento de contraseña. Por favor, intentalo nuevamente.');
       console.error('Error al enviar el correo de restablecimiento de contraseña:', error);
     }
   };
 
   return (
     <section id='recuperarPassword'>
-      <img src={Logo} alt="Logo de Levrone" className="h-32 w-32 m-auto mt-8" />
+      <img src={Logo} alt="Logo de LEVRONE" className="h-32 w-32 m-auto mt-8" />
 
       <main className="flex justify-center items-center mt-6">
         <div className="border shadow-xl rounded px-8 pt-6 pb-8 mb-4 flex flex-col w-3/4 lg:w-1/3">

@@ -140,7 +140,7 @@ const Contacto = () => {
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         <div className='flex flex-col lg:flex-row'>
           <div className='w-full lg:w-1/2'>
-            <img src={Img} alt="Levrone entrenando" className="w-full m-auto p-8 img-size" style={{ borderRadius: '80px' }} />
+            <img src={Img} alt="LEVRONE entrenando" className="w-full m-auto p-8 img-size" style={{ borderRadius: '80px' }} />
           </div>
 
           <div className='w-full lg:w-1/2 flex items-center'>

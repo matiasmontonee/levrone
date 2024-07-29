@@ -28,7 +28,7 @@ const Error404 = () => {
     <section id='error404'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         <div className="py-8">
-          <img src={bannerImage} alt="Logo de Levrone" className='w-40 h-40 mx-auto' />
+          <img src={bannerImage} alt="Logo de LEVRONE" className='w-40 h-40 mx-auto' />
           <div className="text-center mt-4 px-4">
             <h2 className="md:text-4xl text-xl font-bold text-orange-600 mb-4">Página no encontrada</h2>
             <p className="mb-6 md:text-lg text-sm">Para ver nuestros productos <Link to="/productos" className="text-blue-500 hover:text-blue-400 underline">Clickeá acá!</Link></p>
