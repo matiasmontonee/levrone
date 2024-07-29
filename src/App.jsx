@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+// import RutaProtegida from './components/RutaProtegida';
 import { Provider } from 'react-redux';
 import store from './store';
 import './assets/css/style.css';
