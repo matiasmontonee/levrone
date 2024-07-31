@@ -19,6 +19,7 @@ import Programa from './views/Programa';
 import Login from './views/Login';
 import Registro from './views/Registro';
 import RecuperarPassword from './views/RecuperarPassword';
+import Perfil from './views/Perfil';
 import RegistroCompras from './views/RegistroCompras';
 import Checkout from './views/Checkout';
 import Confirmacion from './views/Confirmacion';
@@ -46,6 +47,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/recuperarpassword" element={<RecuperarPassword />} />
+            <Route path="/perfil" element={<Perfil />} />
             <Route path="/compras" element={<RegistroCompras />} />
             <Route path="/programa" element={<Programa />} />
             <Route path="/checkout" element={<Checkout />} />
