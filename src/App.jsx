@@ -85,4 +85,4 @@ const FooterControl = () => {
   return <Footer />;
 };
 
-export default App;
+export default App
