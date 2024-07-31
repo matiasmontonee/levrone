@@ -125,6 +125,7 @@ const Navbar = () => {
             <div className={`absolute right-0 mt-2 ${isAuthenticated ? 'w-96' : 'w-32'} bg-white border rounded-md shadow-lg`}>
               {isAuthenticated ? ( // Si el usuario está autenticado 
                 <>
+                  <Link to="/perfil" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Mi perfil</Link>
                   <Link to="/compras" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Mis compras</Link>
                   <Link to="/programa" className="block px-4 py-2 text-black hover:bg-gray-200" onClick={toggleUserDropdown}>Programa de afiliados</Link>
                   <button onClick={logout} className="block px-4 py-2 text-black hover:bg-gray-200">Cerrar sesión ({user.email})</button>
