@@ -109,7 +109,7 @@ const Detalles = () => {
   return (
     <section id='detalles'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
-        <div className="flex p-8 pb-0">
+        <div className="flex flex-wrap p-8 pb-0 details">
           <Link to="/"><FaHome className='mr-1.5 mt-0.5 text-gray-800' /></Link>
           <Link to="/productos" className='mr-1.5 text-gray-800'>/ Productos /</Link>
           {producto && (
