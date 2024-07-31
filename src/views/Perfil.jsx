@@ -38,7 +38,7 @@ const Perfil = () => {
     return (
       <section id='perfil'>
         <h1 className='text-3xl sm:text-4xl text-center my-4 mx-4 font-bold'>Perfil de Usuario</h1>
-        <p className='text-center text-red-500'>No estás autenticado.</p>
+        <p className='text-center text-red-500 mb-4'>No estás autenticado.</p>
       </section>
     );
   }
