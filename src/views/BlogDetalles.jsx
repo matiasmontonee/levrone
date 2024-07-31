@@ -48,7 +48,7 @@ const BlogDetalles = () => {
   return (
     <section id='blog-detalles'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
-        <div className="flex p-8 pb-6">
+        <div className="flex flex-wrap p-8 pb-6 details">
           <Link to="/"><FaHome className='mr-1.5 mt-0.5 text-gray-800' /></Link>
           <Link to="/blog" className='mr-1.5 text-gray-800'>/ Blog /</Link>
           {post && <p className='text-gray-800'>{post.titulo}</p>}
