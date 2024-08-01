@@ -1,15 +1,40 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
+import { auth, onAuthStateChanged } from '../firebase';
 
-const RutaProtegida = ({ element: Element }) => {
-  const { isAuthenticated } = useAuth();
+const RutaProtegida = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  if (!isAuthenticated) { // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
-    return <Navigate to="/login" />;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!isAuthenticated && !loading) {
+      navigate('/login', { state: { fromProtectedRoute: true } });
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  if (loading) {
+    return <div>Cargando...</div>;
   }
 
-  return <Element />;
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return <Outlet />;
 };
 
 export default RutaProtegida;
