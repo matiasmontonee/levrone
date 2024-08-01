@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { FaArrowLeft, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { getAuth, signInWithEmailAndPassword } from "../firebase";
 import Logo from '../assets/imgs/logos/logo.png';
@@ -15,6 +15,20 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userName, setUserName] = useState('');
+  const [showRedirectModal, setShowRedirectModal] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.fromProtectedRoute) {
+      setShowRedirectModal(true);
+
+      const timer = setTimeout(() => {
+        setShowRedirectModal(false);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
 
   const redirectToHome = () => {
     window.location.href = '/';
@@ -104,6 +118,10 @@ const Login = () => {
 
       {showSuccessModal && (
         <ModalUser onClose={() => setShowSuccessModal(false)} title="¡Inicio de sesión exitoso!" message={`Bienvenido de vuelta, ${userName}.`} />
+      )}
+
+      {showRedirectModal && (
+        <ModalUser onClose={() => setShowRedirectModal(false)} title="¡Acceso denegado!" message="Para acceder a esta sección, debes iniciar sesión." />
       )}
     </section>
   );
