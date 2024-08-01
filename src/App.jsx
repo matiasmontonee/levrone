@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-// import RutaProtegida from './components/RutaProtegida';
+import RutaProtegida from './components/RutaProtegida';
 import { Provider } from 'react-redux';
 import store from './store';
 import './assets/css/style.css';
@@ -27,7 +27,6 @@ import Error404 from './views/Error404';
 import Footer from './components/Footer';
 
 function App() {
-
   return (
     <Provider store={store}>
       <Router>
@@ -36,10 +35,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Inicio />} />
             <Route path="/quienes-somos" element={<QuienesSomos />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:id" element={<BlogDetalles />} />
-            <Route path="/foro" element={<Foro />} />
-            <Route path="/post" element={<Post />} />
             <Route path="/productos" element={<Productos />} />
             <Route path="/productos/:id" element={<Detalles />} />
             <Route path="/envios" element={<Envios />} />
@@ -47,12 +42,19 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/recuperarpassword" element={<RecuperarPassword />} />
-            <Route path="/perfil" element={<Perfil />} />
-            <Route path="/compras" element={<RegistroCompras />} />
-            <Route path="/programa" element={<Programa />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/confirmacion" element={<Confirmacion />} />
             <Route path="*" element={<Error404 />} />
+            {/* RUTAS PROTEGIDAS */}
+            <Route path="/" element={<RutaProtegida />}>
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogDetalles />} />
+              <Route path="/foro" element={<Foro />} />
+              <Route path="/post" element={<Post />} />
+              <Route path="/perfil" element={<Perfil />} />
+              <Route path="/compras" element={<RegistroCompras />} />
+              <Route path="/programa" element={<Programa />} />
+            </Route>
           </Routes>
           <FooterControl />
         </React.Fragment>
