@@ -69,7 +69,8 @@ const Confirmacion = () => {
           <div className="text-center">
             <h1 className="text-3xl font-bold text-orange-600">¡Compra confirmada!</h1>
             <p className="my-2 text-gray-700">Gracias por tu compra. Tu pedido ha sido confirmado.</p>
-            <p className='text-xl font-bold'>Total: ${compra.precioTotalCarrito.toLocaleString('es-ES')}</p>
+            <p className='font-semibold'>Envío: ${compra.shippingCost.toLocaleString('es-ES')}</p>
+            <p className='text-xl font-bold'>Total: ${compra.totalConEnvio.toLocaleString('es-ES')}</p>
           </div>
           <div className="mb-8 flex flex-col">
             {compra.carrito.map((producto, index) => (
