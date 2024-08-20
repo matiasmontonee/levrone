@@ -83,7 +83,8 @@ const RegistroCompras = () => {
           {compras.map(compra => (
             <div key={compra.id} className="border-b-2 mb-8 pb-4">
               <p className='text-lg font-bold'>Pedido #{compra.id}</p>
-              <p className='text-lg font-bold'>Total: ${compra.precioTotalCarrito.toLocaleString('es-ES')}</p>
+              <p className='text-lg font-bold'>Envío: ${compra.shippingCost.toLocaleString('es-ES')}</p>
+              <p className='text-lg font-bold'>Total: ${compra.totalConEnvio.toLocaleString('es-ES')}</p>
               <p className="text-gray-600 my-2">
                 {new Date(compra.timestamp.toDate()).toLocaleString('es-ES', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric'})} - {getEstadoCompra(compra.timestamp)}
               </p>
