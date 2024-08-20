@@ -152,8 +152,12 @@ const Checkout = () => {
 
     if (!hasError) {
       try {
+        const totalConEnvio = precioTotalCarrito + shippingCost;
+        
         const ordenData = {
           precioTotalCarrito,
+          shippingCost,
+          totalConEnvio,
           carrito,
           formData,
           timestamp: serverTimestamp()
