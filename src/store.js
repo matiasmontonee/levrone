@@ -28,7 +28,6 @@ export const vaciarCarrito = () => ({
 // Reducer
 const initialState = {
   carrito: JSON.parse(localStorage.getItem('carrito')) || [],
-  precioTotalCarrito: 0,
 };
 
 const carritoReducer = (state = initialState, action) => {
@@ -38,28 +37,28 @@ const carritoReducer = (state = initialState, action) => {
       if (productoExistenteIndex !== -1) {
         const carritoActualizado = [...state.carrito];
         carritoActualizado[productoExistenteIndex].cantidad += 1;
-        carritoActualizado[productoExistenteIndex].precioTotal = carritoActualizado[productoExistenteIndex].precio * carritoActualizado[productoExistenteIndex].cantidad;
-        const precioTotalCarrito = carritoActualizado.reduce((total, producto) => total + producto.precioTotal, 0);
+        carritoActualizado[productoExistenteIndex].precioTotal = parseFloat((carritoActualizado[productoExistenteIndex].precio * carritoActualizado[productoExistenteIndex].cantidad).toFixed(3));
+        const precioTotalCarrito = parseFloat(carritoActualizado.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
         localStorage.setItem('carrito', JSON.stringify(carritoActualizado));
         return {
           ...state,
           carrito: carritoActualizado,
-          precioTotalCarrito,
+          precioTotalCarrito: precioTotalCarrito,
         };
       } else {
-        const nuevoProducto = { ...action.payload, cantidad: 1, precioTotal: action.payload.precio };
+        const nuevoProducto = { ...action.payload, cantidad: 1, precioTotal: parseFloat(action.payload.precio.toFixed(3)) };
         const nuevoCarrito = [...state.carrito, nuevoProducto];
-        const precioTotalCarrito = nuevoCarrito.reduce((total, producto) => total + producto.precioTotal, 0);
+        const precioTotalCarrito = parseFloat(nuevoCarrito.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
         localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
         return {
           ...state,
           carrito: nuevoCarrito,
-          precioTotalCarrito,
+          precioTotalCarrito: precioTotalCarrito,
         };
       }
     case 'ELIMINAR_PRODUCTO_DEL_CARRITO':
       const carritoFiltrado = state.carrito.filter(producto => producto.id !== action.payload);
-      const precioTotalCarritoEliminado = carritoFiltrado.reduce((total, producto) => total + producto.precioTotal, 0);
+      const precioTotalCarritoEliminado = parseFloat(carritoFiltrado.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
       localStorage.setItem('carrito', JSON.stringify(carritoFiltrado));
       return {
         ...state,
@@ -68,9 +67,9 @@ const carritoReducer = (state = initialState, action) => {
       };
     case 'INCREMENTAR_CANTIDAD_PRODUCTO':
       const carritoIncrementado = state.carrito.map(producto => 
-        producto.id === action.payload ? { ...producto, cantidad: producto.cantidad + 1, precioTotal: producto.precio * (producto.cantidad + 1) } : producto
+        producto.id === action.payload ? { ...producto, cantidad: producto.cantidad + 1, precioTotal: parseFloat((producto.precio * (producto.cantidad + 1)).toFixed(3)) } : producto
       );
-      const precioTotalCarritoIncrementado = carritoIncrementado.reduce((total, producto) => total + producto.precioTotal, 0);
+      const precioTotalCarritoIncrementado = parseFloat(carritoIncrementado.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
       localStorage.setItem('carrito', JSON.stringify(carritoIncrementado));
       return {
         ...state,
@@ -81,7 +80,7 @@ const carritoReducer = (state = initialState, action) => {
       const productoADecrementar = state.carrito.find(producto => producto.id === action.payload);
       if (productoADecrementar.cantidad === 1) {
         const carritoFiltradoDecrementado = state.carrito.filter(producto => producto.id !== action.payload);
-        const precioTotalCarritoDecrementado = carritoFiltradoDecrementado.reduce((total, producto) => total + producto.precioTotal, 0);
+        const precioTotalCarritoDecrementado = parseFloat(carritoFiltradoDecrementado.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
         localStorage.setItem('carrito', JSON.stringify(carritoFiltradoDecrementado));
         return {
           ...state,
@@ -90,9 +89,9 @@ const carritoReducer = (state = initialState, action) => {
         };
       } else {
         const carritoDecrementado = state.carrito.map(producto => 
-          producto.id === action.payload ? { ...producto, cantidad: producto.cantidad - 1, precioTotal: producto.precio * (producto.cantidad - 1) } : producto
+          producto.id === action.payload ? { ...producto, cantidad: producto.cantidad - 1, precioTotal: parseFloat((producto.precio * (producto.cantidad - 1)).toFixed(3)) } : producto
         );
-        const precioTotalCarritoDecrementado = carritoDecrementado.reduce((total, producto) => total + producto.precioTotal, 0);
+        const precioTotalCarritoDecrementado = parseFloat(carritoDecrementado.reduce((total, producto) => total + producto.precioTotal, 0).toFixed(3));
         localStorage.setItem('carrito', JSON.stringify(carritoDecrementado));
         return {
           ...state,
