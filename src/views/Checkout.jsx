@@ -53,6 +53,33 @@ const Checkout = () => {
     }
   }, [redirectToConfirmation, navigate]);
 
+  useEffect(() => { // Calcular el costo de envío cuando cambia el código postal
+    const calcularCostoEnvio = () => {
+      let nuevoCostoEnvio = 0;
+      const postalCode = parseInt(formData.postal, 10);
+
+      if (precioTotalCarrito > 100000) {
+        nuevoCostoEnvio = 0;
+      } else {
+        if (postalCode >= 1000 && postalCode <= 2000) {
+          nuevoCostoEnvio = 10000;
+        } else if (postalCode >= 2000 && postalCode <= 4000) {
+          nuevoCostoEnvio = 12000;
+        } else if (postalCode >= 4000 && postalCode <= 6000) {
+          nuevoCostoEnvio = 14000;
+        } else if (postalCode >= 6000 && postalCode <= 9999) {
+          nuevoCostoEnvio = 16000;
+        } else {
+          nuevoCostoEnvio = 0;
+        }
+      }
+
+      setShippingCost(nuevoCostoEnvio);
+    };
+
+    calcularCostoEnvio();
+  }, [formData.postal, precioTotalCarrito]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
@@ -62,27 +89,13 @@ const Checkout = () => {
         postalValue = postalValue.slice(0, 4);
       }
 
-      if (postalValue.length > 0 && postalValue[0] === '0') { // Si empieza con 0 se limpia el valor
+      if (postalValue.length > 0 && postalValue[0] === '0') {
         postalValue = '';
       }
       setFormData({
         ...formData,
         [name]: postalValue
       });
-
-      // Calcular envío en base al código postal
-      const postalCode = parseInt(postalValue);
-      if (postalCode >= 1000 && postalCode <= 2000) {
-        setShippingCost(10000);
-      } else if (postalCode >= 2000 && postalCode <= 4000) {
-        setShippingCost(12000);
-      } else if (postalCode >= 4000 && postalCode <= 6000) {
-        setShippingCost(14000);
-      } else if (postalCode >= 6000 && postalCode <= 9999) {
-        setShippingCost(16000);
-      } else {
-        setShippingCost(0);
-      }
     } else {
       setFormData({
         ...formData,
