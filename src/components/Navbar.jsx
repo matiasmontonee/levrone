@@ -267,7 +267,7 @@ const Navbar = () => {
             <>
               <div className='flex flex-col sm:flex-row justify-between items-center mt-2 mb-4 sm:mb-6 w-full text-white'>
                 <Link to="/productos" className='bg-gray-500 hover:bg-gray-600 p-2 px-4 rounded-full sm:mb-0 mb-4' onClick={toggleCart}><button>Ver más productos</button></Link>
-                <p className='hidden sm:block text-black font-bold'>Subtotal: ${precioTotalCarrito.toLocaleString('es-ES')}</p>
+                <p className='hidden sm:block text-black font-bold'>Subtotal: ${precioTotalCarrito}</p>
                 <button onClick={() => dispatch(vaciarCarrito())} className='bg-gray-500 hover:bg-gray-600 p-2 px-4 rounded-full'>Vaciar carrito</button>
               </div>
               <p className='sm:hidden text-black font-bold mb-4 mx-auto'>Subtotal: ${precioTotalCarrito.toLocaleString('es-ES')}</p>
