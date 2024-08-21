@@ -270,7 +270,7 @@ const Navbar = () => {
                 <p className='hidden sm:block text-black font-bold'>Subtotal: ${precioTotalCarrito}</p>
                 <button onClick={() => dispatch(vaciarCarrito())} className='bg-gray-500 hover:bg-gray-600 p-2 px-4 rounded-full'>Vaciar carrito</button>
               </div>
-              <p className='sm:hidden text-black font-bold mb-4 mx-auto'>Subtotal: ${precioTotalCarrito.toLocaleString('es-ES')}</p>
+              <p className='sm:hidden text-black font-bold mb-4 mx-auto'>Subtotal: ${precioTotalCarrito}</p>
               <Link to="/checkout" className='w-full flex justify-center items-center text-white font-bold bg-orange-600 hover:bg-orange-500 p-2 px-4 rounded-full' onClick={toggleCart}><button>Continuar con la compra</button><FaArrowRight className='ml-2' /></Link>
             </>
           )}
