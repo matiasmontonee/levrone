@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const Envios = () => {
+const Programa = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -39,4 +39,4 @@ const Envios = () => {
   );
 };
 
-export default Envios;
+export default Programa;
