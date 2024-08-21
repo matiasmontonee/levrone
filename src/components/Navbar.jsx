@@ -240,7 +240,7 @@ const Navbar = () => {
             <>
               <div className='text-center w-full mt-8'>
                 <p className="text-lg sm:text-xl mb-8">Tu carrito está vacío :(</p>
-                <Link to="/productos" className='text-white bg-orange-600 hover:bg-orange-500 p-1.5 lg:p-2.5 pr-2 lg:pr-4 pl-2 lg:pl-4 rounded-full' onClick={toggleCart}><button>Ver productos</button></Link>
+                <Link to="/productos" className='text-white bg-orange-600 hover:bg-orange-500 p-2.5 px-4 rounded-full' onClick={toggleCart}><button>Ver productos</button></Link>
               </div>
             </>
           ) : (
