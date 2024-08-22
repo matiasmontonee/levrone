@@ -11,6 +11,7 @@ const Checkout = () => {
   const carrito = useSelector(state => state.carrito);
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
   const [shippingCost, setShippingCost] = useState(0);
+  const [discountCode, setDiscountCode] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -49,9 +50,9 @@ const Checkout = () => {
 
   useEffect(() => {
     if (redirectToConfirmation) {
-      navigate('/confirmacion');
+      navigate('/confirmacion', { state: { discountCode } }); // Pasar el descuento a confirmación
     }
-  }, [redirectToConfirmation, navigate]);
+  }, [redirectToConfirmation, navigate, discountCode]);
 
   useEffect(() => { // Calcular el costo de envío cuando cambia el código postal
     const calcularCostoEnvio = () => {
@@ -118,6 +119,15 @@ const Checkout = () => {
     });
   };
 
+  const generateDiscountCode = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+      code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -166,6 +176,8 @@ const Checkout = () => {
     if (!hasError) {
       try {
         const totalConEnvio = precioTotalCarrito + shippingCost;
+        const discountCode = generateDiscountCode();
+        setDiscountCode(discountCode);
         
         const ordenData = {
           precioTotalCarrito,
@@ -173,13 +185,13 @@ const Checkout = () => {
           totalConEnvio,
           carrito,
           formData,
+          discountCode,
           timestamp: serverTimestamp()
         };
 
         await addDoc(collection(db, "ordenes"), ordenData);
 
         dispatch(vaciarCarrito());
-
         setRedirectToConfirmation(true);
       } catch (error) {
         console.error('Error:', error);
@@ -341,6 +353,14 @@ const Checkout = () => {
               <div className='flex justify-between font-bold'>
                 <p>Total</p>
                 <p>${(precioTotalCarrito + shippingCost).toLocaleString('es-ES')}</p>
+              </div>
+              <div className="mt-2">
+                <div className='flex items-center'>
+                  <label htmlFor="discountCode" className='block font-semibold mr-1.5'>Código de descuento</label>
+                  <Link to={'/programa'} className='text-sm text-blue-500 underline hover:text-blue-400'>(Encontralo acá)</Link>
+                </div>
+                <input type='text' id='discountCode' name='discountCode' className='border border-gray-300 rounded-md py-2 px-4 block w-full my-2' />
+                <button type='submit' className='flex justify-center mx-auto w-full bg-orange-600 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Aplicar</button>
               </div>
             </div>
           </div>
