@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { db, collection, getDocs } from '../firebase';
+import { FaClipboard } from 'react-icons/fa';
 
 const Programa = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [discountCodes, setDiscountCodes] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,16 +26,42 @@ const Programa = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const fetchDiscountCodes = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'ordenes'));
+        const codes = querySnapshot.docs.map(doc => doc.data().discountCode).filter(code => code);
+        setDiscountCodes(codes);
+      } catch (error) {
+        console.error('Error fetching discount codes:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDiscountCodes();
+  }, []);
+
   return (
     <section id='programa'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         <div className='lg:px-12 p-8 pb-6'>
           <h1 className='text-xl sm:text-2xl text-center'>¡Bienvenidos a nuestro Programa de Afiliados!</h1>
           <p className='mt-4 text-center'>Acá podrás canjear códigos para recibir descuentos en tus compras.</p>
-          <p className='mt-8 text-center'>Todavía no tenés códigos de descuento, realizá una compra para obtener uno.</p>
-          <Link to='/productos' className='flex justify-center'>
-            <button className='mt-4 bg-orange-500 hover:bg-orange-400 rounded-full text-white font-bold p-1 sm:py-2 px-3 sm:px-4 text-center inline-block'>Comprar</button>
-          </Link>
+          {loading ? (
+            <p className='mt-8 text-center'>Cargando códigos de descuento...</p>
+          ) : discountCodes.length > 0 ? (
+            <div className='mt-8 flex flex-col items-center'>
+              <h2 className='text-lg font-semibold'>Códigos de descuento disponibles:</h2>
+              <ul className='list-disc list-inside mt-4 w-3/4 md:w-2/4'>
+                {discountCodes.map((code, index) => (
+                  <li key={index} className='text-lg font-semibold border border-gray-500 px-2 flex justify-between items-center'>{code} <FaClipboard className='text-orange-500 hover:text-orange-400 cursor-pointer' /></li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className='mt-8 text-center'>No hay códigos de descuento disponibles en este momento.</p>
+          )}
         </div>
       </main>
     </section>
