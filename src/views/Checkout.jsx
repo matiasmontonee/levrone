@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { eliminarProductoDelCarrito, incrementarCantidadProducto, decrementarCantidadProducto, vaciarCarrito} from '../store';
 import { FaArrowRight, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import { db, collection, addDoc, serverTimestamp, getAuth } from "../firebase";
+import { db, collection, addDoc, serverTimestamp, getAuth, getDocs } from "../firebase";
 
 const Checkout = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,6 +12,10 @@ const Checkout = () => {
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
   const [shippingCost, setShippingCost] = useState(0);
   const [discountCode, setDiscountCode] = useState('');
+  const [inputDiscountCode, setInputDiscountCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [totalConDescuento, setTotalConDescuento] = useState(precioTotalCarrito + shippingCost);
+  const [discountError, setDiscountError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -27,7 +31,7 @@ const Checkout = () => {
   });
   const fieldLabels = {
     nombre: 'Nombre', apellido: 'Apellido', email: 'Email', telefono: 'Teléfono', provincia: 'Provincia', localidad: 'Localidad', postal: 'Código postal', calle: 'Calle', calleNum: 'Número', piso: 'Piso', tarjeta: 'Nombre en la tarjeta', numero: 'Número de la tarjeta', vencimiento: 'Fecha de vencimiento', cvv: 'CVV'
-  }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -128,6 +132,30 @@ const Checkout = () => {
     return code;
   };
 
+  const handleApplyDiscount = async (e) => {
+    e.preventDefault();
+
+    try {
+        const descuentosQuery = collection(db, 'descuentos');
+        const querySnapshot = await getDocs(descuentosQuery);
+        const validCodes = querySnapshot.docs.map(doc => doc.data().discountCode);
+
+        if (validCodes.includes(inputDiscountCode)) {
+            const discountAmount = precioTotalCarrito * 0.05;
+            const newTotal = (precioTotalCarrito - discountAmount) + shippingCost;
+            setTotalConDescuento(newTotal);
+            setDiscountApplied(true);
+            setDiscountError('');
+        } else {
+            setDiscountError('Código de descuento no válido.');
+            setDiscountApplied(false);
+        }
+    } catch (error) {
+        setDiscountError('Hubo un error al aplicar el código de descuento.');
+        setDiscountApplied(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -178,6 +206,11 @@ const Checkout = () => {
         const totalConEnvio = precioTotalCarrito + shippingCost;
         const discountCode = generateDiscountCode();
         setDiscountCode(discountCode);
+
+        await addDoc(collection(db, "descuentos"), {
+          discountCode,
+          timestamp: serverTimestamp()
+        });
         
         const ordenData = {
           precioTotalCarrito,
@@ -185,7 +218,6 @@ const Checkout = () => {
           totalConEnvio,
           carrito,
           formData,
-          discountCode,
           timestamp: serverTimestamp()
         };
 
@@ -352,15 +384,16 @@ const Checkout = () => {
               </div>
               <div className='flex justify-between font-bold'>
                 <p>Total</p>
-                <p>${(precioTotalCarrito + shippingCost).toLocaleString('es-ES')}</p>
+                <p>${(discountApplied ? totalConDescuento : precioTotalCarrito + shippingCost).toLocaleString('es-ES')}</p>
               </div>
               <div className="mt-2">
                 <div className='flex items-center'>
                   <label htmlFor="discountCode" className='block font-semibold mr-1.5'>Código de descuento</label>
                   <Link to={'/programa'} className='text-sm text-blue-500 underline hover:text-blue-400'>(Encontralo acá)</Link>
                 </div>
-                <input type='text' id='discountCode' name='discountCode' className='border border-gray-300 rounded-md py-2 px-4 block w-full my-2' />
-                <button type='submit' className='flex justify-center mx-auto w-full bg-orange-600 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Aplicar</button>
+                <input type='text' id='discountCode' name='discountCode' value={inputDiscountCode} onChange={(e) => setInputDiscountCode(e.target.value)} className='border border-gray-300 rounded-md py-2 px-4 block w-full my-2' />
+                {discountError && <p className="text-red-500 my-2">{discountError}</p>}
+                <button onClick={handleApplyDiscount} className='flex justify-center mx-auto w-full bg-orange-600 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Aplicar</button>
               </div>
             </div>
           </div>
