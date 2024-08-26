@@ -6,17 +6,14 @@ const Programa = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [discountCodes, setDiscountCodes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [copiedCode, setCopiedCode] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const scrollThreshold = 34;
 
-      if (scrollPosition > scrollThreshold) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(scrollPosition > scrollThreshold);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -42,6 +39,25 @@ const Programa = () => {
     fetchDiscountCodes();
   }, []);
 
+  const handleCopy = (code) => {
+    const textElement = document.getElementById(`code-${code}`);
+    const range = document.createRange();
+    range.selectNodeContents(textElement);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    try {
+      document.execCommand('copy');
+      setCopiedCode(code);
+      setTimeout(() => setCopiedCode(null), 2000);
+    } catch (error) {
+      console.error('Error copying text:', error);
+    }
+
+    selection.removeAllRanges();
+  };
+
   return (
     <section id='programa'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
@@ -55,7 +71,10 @@ const Programa = () => {
               <h2 className='text-lg font-semibold'>Códigos de descuento disponibles:</h2>
               <ul className='list-disc list-inside mt-4 w-3/4 md:w-2/4'>
                 {discountCodes.map((code, index) => (
-                  <li key={index} className='text-lg font-semibold border border-gray-500 px-2 flex justify-between items-center'>{code} <FaClipboard className='text-orange-500 hover:text-orange-400 cursor-pointer' /></li>
+                  <li key={index} className='text-lg font-semibold border border-gray-500 px-2 flex justify-between items-center my-3'>
+                    <span id={`code-${code}`}>{code}</span>
+                    <FaClipboard className={`transition-colors duration-500 ease-in-out cursor-pointer hover:text-orange-400 ${copiedCode === code ? 'text-green-500 animate-fade-out' : 'text-orange-500'}`} onClick={() => handleCopy(code)} />
+                  </li>
                 ))}
               </ul>
             </div>
