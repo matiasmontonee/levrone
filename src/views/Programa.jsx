@@ -29,7 +29,7 @@ const Programa = () => {
   useEffect(() => {
     const fetchDiscountCodes = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'ordenes'));
+        const querySnapshot = await getDocs(collection(db, 'descuentos'));
         const codes = querySnapshot.docs.map(doc => doc.data().discountCode).filter(code => code);
         setDiscountCodes(codes);
       } catch (error) {
