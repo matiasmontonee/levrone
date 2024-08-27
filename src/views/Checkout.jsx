@@ -16,6 +16,7 @@ const Checkout = () => {
   const [discountApplied, setDiscountApplied] = useState(false);
   const [totalConDescuento, setTotalConDescuento] = useState(precioTotalCarrito + shippingCost);
   const [discountError, setDiscountError] = useState('');
+  const [discountSuccess, setDiscountSuccess] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -136,23 +137,25 @@ const Checkout = () => {
     e.preventDefault();
 
     try {
-        const descuentosQuery = collection(db, 'descuentos');
-        const querySnapshot = await getDocs(descuentosQuery);
-        const validCodes = querySnapshot.docs.map(doc => doc.data().discountCode);
-
-        if (validCodes.includes(inputDiscountCode)) {
-            const discountAmount = precioTotalCarrito * 0.05;
-            const newTotal = (precioTotalCarrito - discountAmount) + shippingCost;
-            setTotalConDescuento(newTotal);
-            setDiscountApplied(true);
-            setDiscountError('');
-        } else {
-            setDiscountError('Código de descuento no válido.');
-            setDiscountApplied(false);
-        }
-    } catch (error) {
-        setDiscountError('Hubo un error al aplicar el código de descuento.');
+      const descuentosQuery = collection(db, 'descuentos');
+      const querySnapshot = await getDocs(descuentosQuery);
+      const validCodes = querySnapshot.docs.map(doc => doc.data().discountCode);
+        
+      if (validCodes.includes(inputDiscountCode)) {
+        const discountAmount = precioTotalCarrito * 0.05;
+        const newTotal = (precioTotalCarrito - discountAmount) + shippingCost;
+        setTotalConDescuento(newTotal);
+        setDiscountApplied(true);
+        setDiscountError('');
+        setDiscountSuccess('¡Descuento aplicado correctamente!');
+      } else {
+        setDiscountError('Código de descuento no válido.');
         setDiscountApplied(false);
+        setDiscountSuccess('');
+      }
+    } catch (error) {
+      setDiscountError('Hubo un error al aplicar el código de descuento.');
+      setDiscountApplied(false);
     }
   };
 
@@ -203,7 +206,8 @@ const Checkout = () => {
 
     if (!hasError) {
       try {
-        const totalConEnvio = precioTotalCarrito + shippingCost;
+        const discountAmount = discountApplied ? precioTotalCarrito * 0.05 : 0;
+        const totalConEnvio = (precioTotalCarrito - discountAmount) + shippingCost;
         const discountCode = generateDiscountCode();
         setDiscountCode(discountCode);
 
@@ -393,6 +397,7 @@ const Checkout = () => {
                 </div>
                 <input type='text' id='discountCode' name='discountCode' value={inputDiscountCode} onChange={(e) => setInputDiscountCode(e.target.value)} className='border border-gray-300 rounded-md py-2 px-4 block w-full my-2' />
                 {discountError && <p className="text-red-500 my-2">{discountError}</p>}
+                {discountSuccess && <p className="text-green-500 my-2">{discountSuccess}</p>}
                 <button onClick={handleApplyDiscount} className='flex justify-center mx-auto w-full bg-orange-600 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Aplicar</button>
               </div>
             </div>
