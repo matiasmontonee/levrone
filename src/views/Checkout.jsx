@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { eliminarProductoDelCarrito, incrementarCantidadProducto, decrementarCantidadProducto, vaciarCarrito} from '../store';
 import { FaArrowRight, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import { db, collection, addDoc, serverTimestamp, getAuth, getDocs } from "../firebase";
+import { db, collection, addDoc, serverTimestamp, getAuth, getDocs, doc, deleteDoc } from "../firebase";
 
 const Checkout = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,12 +11,12 @@ const Checkout = () => {
   const carrito = useSelector(state => state.carrito);
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
   const [shippingCost, setShippingCost] = useState(0);
-  const [discountCode, setDiscountCode] = useState('');
   const [inputDiscountCode, setInputDiscountCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [totalConDescuento, setTotalConDescuento] = useState(precioTotalCarrito + shippingCost);
   const [discountError, setDiscountError] = useState('');
   const [discountSuccess, setDiscountSuccess] = useState('');
+  const [discountDocId, setDiscountDocId] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -55,9 +55,9 @@ const Checkout = () => {
 
   useEffect(() => {
     if (redirectToConfirmation) {
-      navigate('/confirmacion', { state: { discountCode } }); // Pasar el descuento a confirmación
+      navigate('/confirmacion');
     }
-  }, [redirectToConfirmation, navigate, discountCode]);
+  }, [redirectToConfirmation, navigate]);
 
   useEffect(() => { // Calcular el costo de envío cuando cambia el código postal
     const calcularCostoEnvio = () => {
@@ -85,6 +85,14 @@ const Checkout = () => {
 
     calcularCostoEnvio();
   }, [formData.postal, precioTotalCarrito]);
+
+  const incrementQuantity = (id) => {
+    dispatch(incrementarCantidadProducto(id));
+  };
+
+  const decrementQuantity = (id) => {
+    dispatch(decrementarCantidadProducto(id));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -139,15 +147,23 @@ const Checkout = () => {
     try {
       const descuentosQuery = collection(db, 'descuentos');
       const querySnapshot = await getDocs(descuentosQuery);
-      const validCodes = querySnapshot.docs.map(doc => doc.data().discountCode);
+      const validCodes = querySnapshot.docs.map(doc => ({ // Mapear los docs con su ID y código
+        id: doc.id,
+        code: doc.data().discountCode
+      }));
+
+      // Buscar el código ingresado en la lista de códigos válidos
+      const matchingCode = validCodes.find(codeObj => codeObj.code === inputDiscountCode);
         
-      if (validCodes.includes(inputDiscountCode)) {
+      if (matchingCode) {
         const discountAmount = precioTotalCarrito * 0.05;
         const newTotal = (precioTotalCarrito - discountAmount) + shippingCost;
         setTotalConDescuento(newTotal);
         setDiscountApplied(true);
         setDiscountError('');
         setDiscountSuccess('¡Descuento aplicado correctamente!');
+        
+        setDiscountDocId(matchingCode.id); // Guardar ID del doc para eliminarlo después de comprar
       } else {
         setDiscountError('Código de descuento no válido.');
         setDiscountApplied(false);
@@ -209,7 +225,6 @@ const Checkout = () => {
         const discountAmount = discountApplied ? precioTotalCarrito * 0.05 : 0;
         const totalConEnvio = (precioTotalCarrito - discountAmount) + shippingCost;
         const discountCode = generateDiscountCode();
-        setDiscountCode(discountCode);
 
         await addDoc(collection(db, "descuentos"), {
           discountCode,
@@ -227,20 +242,17 @@ const Checkout = () => {
 
         await addDoc(collection(db, "ordenes"), ordenData);
 
+        if (discountDocId) { // Eliminar el código de descuento usado si existe
+          const discountDocRef = doc(db, "descuentos", discountDocId);
+          await deleteDoc(discountDocRef);
+        }
+
         dispatch(vaciarCarrito());
         setRedirectToConfirmation(true);
       } catch (error) {
         console.error('Error:', error);
       }
     }
-  };
-
-  const incrementQuantity = (id) => {
-    dispatch(incrementarCantidadProducto(id));
-  };
-
-  const decrementQuantity = (id) => {
-    dispatch(decrementarCantidadProducto(id));
   };
 
   return (
