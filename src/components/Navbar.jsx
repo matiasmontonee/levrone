@@ -280,10 +280,13 @@ const Navbar = () => {
                   ? `Subtotal: $${precioTotalCarrito.toLocaleString('es-ES')}`
                   : 'Subtotal: Calculando...'}
               </p>
-              <Link to="/checkout" className={`w-full flex justify-center items-center text-white font-bold p-2 px-4 rounded-full ${!isSubtotalCalculated ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={isSubtotalCalculated ? undefined : (e) => e.preventDefault()}>
+              <Link to="/checkout" className={`w-full flex justify-center items-center text-white font-bold p-2 px-4 rounded-full ${!isSubtotalCalculated ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={isSubtotalCalculated ? toggleCart : (e) => e.preventDefault()}>
                 Continuar con la compra
                 <FaArrowRight className='ml-2' />
               </Link>
+              {!isSubtotalCalculated && (
+                <p className="text-red-500 mx-auto mt-2">Debe actualizar el precio antes de comprar.</p>
+              )}
             </>
           )}
         </div>
