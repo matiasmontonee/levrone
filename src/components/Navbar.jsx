@@ -18,6 +18,7 @@ const Navbar = () => {
   const carrito = useSelector(state => state.carrito);
   const totalProductosEnCarrito = carrito.reduce((total, producto) => total + producto.cantidad, 0);
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
+  const isSubtotalCalculated = precioTotalCarrito !== undefined;
   const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
@@ -279,7 +280,10 @@ const Navbar = () => {
                   ? `Subtotal: $${precioTotalCarrito.toLocaleString('es-ES')}`
                   : 'Subtotal: Calculando...'}
               </p>
-              <Link to="/checkout" className='w-full flex justify-center items-center text-white font-bold bg-orange-600 hover:bg-orange-500 p-2 px-4 rounded-full' onClick={toggleCart}><button>Continuar con la compra</button><FaArrowRight className='ml-2' /></Link>
+              <Link to="/checkout" className={`w-full flex justify-center items-center text-white font-bold p-2 px-4 rounded-full ${!isSubtotalCalculated ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-600 hover:bg-orange-500'}`} onClick={isSubtotalCalculated ? undefined : (e) => e.preventDefault()}>
+                Continuar con la compra
+                <FaArrowRight className='ml-2' />
+              </Link>
             </>
           )}
         </div>
