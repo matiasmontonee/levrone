@@ -235,6 +235,7 @@ const Checkout = () => {
           precioTotalCarrito,
           shippingCost,
           totalConEnvio,
+          discountAmount,
           carrito,
           formData,
           timestamp: serverTimestamp()
