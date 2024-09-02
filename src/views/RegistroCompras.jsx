@@ -65,7 +65,7 @@ const RegistroCompras = () => {
   };
 
   return (
-    <section id='registroCompras'>
+    <section id='registro-compras'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         <div className='p-8 sm:px-16 shadow-lg rounded-lg'>
           <h1 className="text-2xl font-bold text-center mb-8">Historial de Compras</h1>
