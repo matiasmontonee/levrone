@@ -7,6 +7,7 @@ const BlogDetalles = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { id } = useParams();
   const [post, setPost] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,10 +36,10 @@ const BlogDetalles = () => {
         if (postSnapshot.exists()) {
           setPost({ id: postSnapshot.id, ...postSnapshot.data() });
         } else {
-          console.error("No such document!");
+          setError("No se encontró el documento.");
         }
       } catch (error) {
-        console.error("Error fetching blog post:", error);
+        setError("Error al cargar la noticia.");
       }
     };
 
@@ -55,7 +56,9 @@ const BlogDetalles = () => {
         </div>
 
         <div className="p-8 pt-0">
-          {post ? (
+          {error ? (
+            <p className="text-2xl text-center p-8 text-red-500">{error}</p>
+          ) : post ? (
             <>
               <h2 className="text-4xl font-bold mb-4">{post.titulo}</h2>
               <p className="text-xl text-gray-800 mb-2">{post.resumen}</p>
