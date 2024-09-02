@@ -25,7 +25,7 @@ const Post = () => {
         });
         navigate('/foro');
       } catch (error) {
-        console.error('Error adding document: ', error);
+        setError('Error al agregar post.');
       }
     }
   };
