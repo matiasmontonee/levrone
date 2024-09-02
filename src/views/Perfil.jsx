@@ -53,7 +53,6 @@ const Perfil = () => {
       await updateProfile(user, { displayName });
       setError('');
     } catch (error) {
-      console.error('Error updating profile: ', error);
       setError('Error al actualizar el perfil.');
     }
   };
