@@ -36,7 +36,6 @@ const RecuperarPassword = () => {
       setTimeout(redirectToLogin, 5000);
     } catch (error) {
       setEmailError('Error al enviar el correo de restablecimiento de contraseña. Por favor, intentalo nuevamente.');
-      console.error('Error al enviar el correo de restablecimiento de contraseña:', error);
     }
   };
 
