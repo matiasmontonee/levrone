@@ -7,6 +7,7 @@ const Blog = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,7 +37,7 @@ const Blog = () => {
         setPosts(postsData);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching blog posts:", error);
+        setError("No se pudieron cargar las noticias.");
         setIsLoading(false);
       }
     };
@@ -57,6 +58,8 @@ const Blog = () => {
 
         {isLoading ? (
           <p className="text-center text-xl my-8">Cargando noticias...</p>
+        ) : error ? (
+          <p className='text-center text-xl my-8 text-red-500'>{error}</p>
         ) : (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8 pt-4">
             {posts.map(post => (
