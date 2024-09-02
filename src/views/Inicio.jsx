@@ -180,7 +180,7 @@ const Inicio = () => {
         <div className='px-4 sm:px-12'>
           <Link to={'/contacto'}>
             <div className="relative banner">
-              <img src={Banner6} alt="Banner de descuento a profesores" className="w-full h-48 sm:h-56 mb-8 rounded-xl"/>
+              <img src={Banner6} alt="Descuento a profesores" className="w-full h-48 sm:h-56 mb-8 rounded-xl"/>
               <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 rounded-xl">
                 <div className="text-white text-center">
                   <p className='text-2xl sm:text-4xl p-4'>Si sos profe, ¡consultá por descuentos exclusivos!</p>
@@ -191,7 +191,7 @@ const Inicio = () => {
           </Link>
           <Link to={'/envios'}>
             <div className="relative banner">
-              <img src={Banner7} alt="Banner de envíos gratis" className="w-full h-48 sm:h-56 mb-8 rounded-xl" />
+              <img src={Banner7} alt="Envíos gratis" className="w-full h-48 sm:h-56 mb-8 rounded-xl" />
               <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 rounded-xl">
                 <div className="text-white text-center">
                   <p className='text-2xl sm:text-4xl p-4'>¡Envíos gratis en compras superiores a $100.000!</p>
@@ -202,7 +202,7 @@ const Inicio = () => {
           </Link>
           <Link to={'/productos'}>
             <div className="relative banner">
-              <img src={Banner8} alt="Banner de productos" className="w-full h-48 sm:h-56 mb-8 rounded-xl" />
+              <img src={Banner8} alt="Materias primas" className="w-full h-48 sm:h-56 mb-8 rounded-xl" />
               <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-70 rounded-xl">
                 <div className="text-white text-center">
                   <p className='text-2xl sm:text-4xl p-4'>¡Materias primas importadas de primer nivel!</p>
@@ -216,21 +216,21 @@ const Inicio = () => {
         {/* CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-3">
           <div className="sm:mb-8 bg-white border-r border-gray-300">
-            <img src={Icon1} alt="Card" className="w-48 h-32 mx-auto" />
+            <img src={Icon1} alt="Medios de pago" className="w-48 h-32 mx-auto" />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold mb-2">Medios de pago</h3>
               <p className="text-gray-800">Podés pagar con tarjeta de débito o crédito de forma segura. También tenés la opción de pagar con Mercado Pago.</p>
             </div>
           </div>
           <div className="sm:mb-8 bg-white">
-            <img src={Icon2} alt="Card" className="w-48 h-32 mx-auto" />
+            <img src={Icon2} alt="Envíos Nacionales" className="w-48 h-32 mx-auto" />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold mb-2">Envíos Nacionales</h3>
               <p className="text-gray-800">¡Ofrecemos envíos a toda la República Argentina! Tú paquete llega sin nigún inconveniente hasta tu domicilio.</p>
             </div>
           </div>
           <div className="mb-8 bg-white border-l border-gray-300">
-            <img src={Icon3} alt="Card" className="w-48 h-32 mx-auto" />
+            <img src={Icon3} alt="Compra protegida" className="w-48 h-32 mx-auto" />
             <div className="p-4 text-center">
               <h3 className="text-lg font-semibold mb-2">Compra protegida</h3>
               <p className="text-gray-800">Tu compra está segura, podés realizarla con total tranquilidad, te lo garantizamos. ¡Lo que comprás es lo que llega!</p>
