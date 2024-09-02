@@ -122,7 +122,6 @@ const Contacto = () => {
     } catch (error) {
       setIsSuccess(false);
       setShowModal(true);
-      console.error('Error:', error);
     }
   };
 
