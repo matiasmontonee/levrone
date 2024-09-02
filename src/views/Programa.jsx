@@ -6,6 +6,7 @@ const Programa = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [discountCodes, setDiscountCodes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [copiedCode, setCopiedCode] = useState(null);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Programa = () => {
         const codes = querySnapshot.docs.map(doc => doc.data().discountCode).filter(code => code);
         setDiscountCodes(codes);
       } catch (error) {
-        console.error('Error fetching discount codes:', error);
+        setError('Error obteniendo los códigos de descuento.');
       } finally {
         setLoading(false);
       }
@@ -52,7 +53,7 @@ const Programa = () => {
       setCopiedCode(code);
       setTimeout(() => setCopiedCode(null), 2000);
     } catch (error) {
-      console.error('Error copying text:', error);
+      setError('Error al copiar el texto.');
     }
 
     selection.removeAllRanges();
@@ -66,6 +67,8 @@ const Programa = () => {
           <p className='mt-4 text-center'>Acá podrás canjear códigos para recibir descuentos en tus compras.</p>
           {loading ? (
             <p className='mt-8 text-center'>Cargando códigos de descuento...</p>
+          ) : error ? (
+            <p className='mt-8 text-center text-red-500'>{error}</p>
           ) : discountCodes.length > 0 ? (
             <div className='mt-8 flex flex-col items-center'>
               <h2 className='text-lg font-semibold'>Códigos de descuento disponibles:</h2>
