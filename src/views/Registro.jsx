@@ -93,7 +93,7 @@ const Registro = () => {
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('El correo electrónico ya está en uso.');
       } else {
-        console.error('Error al crear el usuario:', error.message);
+        setConfirmPasswordError('Error al crear el usuario.');
       }
     }
   };
