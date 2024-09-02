@@ -52,13 +52,13 @@ const QuienesSomos = () => {
           <p className='text-gray-700 mb-8'>Para brindarles los mejores productos a nuestros clientes, trabajamos con marcas de primer nivel altamente reconocidas y con años de experiencia en el rubro del fitness. Es por eso que queremos presentarles a cada una de ellas, las cuales nos ofrecen su excelente equipo, y gracias a ellos, este negocio es posible.</p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <img src={Logo2} alt="Logo 2" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo3} alt="Logo 3" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo4} alt="Logo 4" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo5} alt="Logo 5" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo6} alt="Logo 6" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo7} alt="Logo 7" className="h-40 object-contain w-64 mx-auto" />
-            <img src={Logo8} alt="Logo 8" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo2} alt="ISOPURE" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo3} alt="Star Nutrition" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo4} alt="Muscletech" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo5} alt="BSN" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo6} alt="Optimum Nutrition" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo7} alt="ENA" className="h-40 object-contain w-64 mx-auto" />
+            <img src={Logo8} alt="Balboa Fit" className="h-40 object-contain w-64 mx-auto" />
           </div>
         </div>
       </main>
