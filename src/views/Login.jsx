@@ -74,7 +74,6 @@ const Login = () => {
         redirectToHome();
       }, 2000);
     } catch (error) {
-      console.error('Error al iniciar sesión:', error.message);
       setPassword('');
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setCredentialsError('Credenciales incorrectas.');
