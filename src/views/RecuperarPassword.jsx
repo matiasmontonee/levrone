@@ -40,7 +40,7 @@ const RecuperarPassword = () => {
   };
 
   return (
-    <section id='recuperarPassword'>
+    <section id='recuperar-password'>
       <img src={Logo} alt="Logo de LEVRONE" className="h-32 w-32 m-auto mt-8" />
 
       <main className="flex justify-center items-center mt-6">
