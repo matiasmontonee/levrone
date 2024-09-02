@@ -135,8 +135,8 @@ const Detalles = () => {
                 <img src={selectedImage} alt={producto.nombre} className="w-96 h-96 mx-auto" />
                 {producto.imagen && producto.imagen2 && (
                   <div className="flex mt-4 justify-center">
-                    <img src={producto.imagen} alt="Miniatura 1" className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen)} />
-                    <img src={producto.imagen2} alt="Miniatura 2" className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen2 ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen2)} />
+                    <img src={producto.imagen} alt={producto.nombre} className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen)} />
+                    <img src={producto.imagen2} alt={producto.nombre} className={`w-12 h-12 mx-2 cursor-pointer border ${selectedImage === producto.imagen2 ? 'border-orange-500' : 'border-gray-300'}`} onClick={() => setSelectedImage(producto.imagen2)} />
                   </div>
                 )}
                 {producto.porcentaje && (
