@@ -10,6 +10,7 @@ const Productos = () => {
   const [filtro, setFiltro] = useState('');
   const [orden, setOrden] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [busqueda, setBusqueda] = useState('');
   const [breadcrumb, setBreadcrumb] = useState([]);
@@ -41,7 +42,7 @@ const Productos = () => {
         setProductos(productosData);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error al obtener los productos:", error);
+        setError("Error al obtener los productos");
         setIsLoading(false);
       }
     };
@@ -180,6 +181,8 @@ const Productos = () => {
 
         {isLoading ? (
           <p className="text-center text-xl my-8">Cargando productos...</p>
+        ) : error ? (
+          <p className="text-center text-xl my-8 text-red-500">{error}</p>
         ) : (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-8">
             {productosFiltrados.map(producto => (
