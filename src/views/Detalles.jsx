@@ -12,6 +12,7 @@ const Detalles = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [shippingCost, setShippingCost] = useState(0);
   const [mensajeError, setMensajeError] = useState('');
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const [agregadoAlCarrito, setAgregadoAlCarrito] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -25,10 +26,10 @@ const Detalles = () => {
           setProducto(productoData);
           setSelectedImage(productoData.imagen);
         } else {
-          console.error("Error al obtener el producto");
+          setError("Error al obtener el producto.");
         }
       } catch (error) {
-        console.error("Error al obtener el producto:", error);
+        setError("Error al obtener el producto.");
       }
     };
 
@@ -125,7 +126,9 @@ const Detalles = () => {
           )}
         </div>
 
-        {producto ? (
+        {error ? (
+          <p className="text-2xl text-center p-8 text-red-500">{error}</p>
+        ) : producto ? (
           <div className='m-6'>
             <div className='flex flex-col md:flex-row justify-between'>
               <div className='border border-gray-300 rounded-lg md:w-1/2 relative'>
