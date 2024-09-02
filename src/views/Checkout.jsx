@@ -8,6 +8,7 @@ import { db, collection, addDoc, serverTimestamp, getAuth, getDocs, doc, deleteD
 const Checkout = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [redirectToConfirmation, setRedirectToConfirmation] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const carrito = useSelector(state => state.carrito);
   const precioTotalCarrito = useSelector(state => state.precioTotalCarrito);
   const [shippingCost, setShippingCost] = useState(0);
@@ -251,7 +252,7 @@ const Checkout = () => {
         dispatch(vaciarCarrito());
         setRedirectToConfirmation(true);
       } catch (error) {
-        console.error('Error:', error);
+        setSubmitError('Ocurrió un error al procesar la compra. Inténtalo nuevamente.');
       }
     }
   };
@@ -361,6 +362,8 @@ const Checkout = () => {
                 </div>
 
                 <button type='submit' className='flex justify-center items-center w-2/4 lg:w-1/4 mx-auto bg-orange-600 mb-4 lg:mb-0 mt-4 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Comprar <FaArrowRight className='ml-2' /></button>
+
+                {submitError && <p className="text-red-500 mt-2 text-center">{submitError}</p>}
               </form>
             </div>
 
