@@ -39,9 +39,9 @@ module.exports = async (req, res) => { // endpoint para procesar pagos
         },
       ],
       back_urls: {
-        success: "https://tu-sitio.com/success",
-        failure: "https://tu-sitio.com/failure",
-        pending: "https://tu-sitio.com/pending",
+        success: "https://levrone.vercel.app/success",
+        failure: "https://levrone.vercel.app/failure",
+        pending: "https://levrone.vercel.app/pending",
       },
       auto_return: "approved",
     };
