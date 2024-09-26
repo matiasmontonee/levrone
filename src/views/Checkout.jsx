@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { eliminarProductoDelCarrito, incrementarCantidadProducto, decrementarCantidadProducto, vaciarCarrito} from '../store';
@@ -257,6 +258,29 @@ const Checkout = () => {
     }
   };
 
+  const handleMercadoPago = async () => {
+    try {
+      const comprador = {
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono
+      };
+
+      // Hacer la petición al backend que creamos en Vercel
+      const response = await axios.post('https://levrone.vercel.app/api/crear-preferencia', {
+        carrito,  // Tu carrito de compras
+        comprador // Datos del comprador
+      });
+
+      // Redirigir a la página de pago de Mercado Pago
+      window.location.href = `https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=${response.data.id}`;
+    } catch (error) {
+      console.error('Error al crear la preferencia', error);
+      setSubmitError('Hubo un problema al procesar el pago.');
+    }
+  };
+
   return (
     <section id='checkout'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
@@ -362,6 +386,13 @@ const Checkout = () => {
                 </div>
 
                 <button type='submit' className='flex justify-center items-center w-2/4 lg:w-1/4 mx-auto bg-orange-600 mb-4 lg:mb-0 mt-4 p-2 rounded-lg text-white hover:bg-orange-500 font-semibold'>Comprar <FaArrowRight className='ml-2' /></button>
+
+                <button
+        onClick={handleMercadoPago}
+        className='flex justify-center items-center w-2/4 lg:w-1/4 mx-auto bg-blue-600 mb-4 lg:mb-0 mt-4 p-2 rounded-lg text-white hover:bg-blue-500 font-semibold'
+      >
+        Pagar con Mercado Pago
+      </button>
 
                 {submitError && <p className="text-red-500 mt-2 text-center">{submitError}</p>}
               </form>
