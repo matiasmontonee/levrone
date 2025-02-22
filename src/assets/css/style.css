@@ -1,0 +1,148 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* EVITAR OVERFLOW */  
+
+html, body {
+    overflow-x: hidden;
+}
+  
+/* FUENTES */
+  
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', 'Montserrat', 'Lato', sans-serif; 
+}
+  
+p, span, a, button {
+    font-family: 'Open Sans', 'Arial', 'Verdana', sans-serif; 
+}
+  
+/* INPUTS  */
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+  
+/* NAVBAR */
+
+.logo:hover {
+    filter: brightness(0.7); 
+}
+  
+.nav-link {
+    position: relative;
+    text-decoration: none;
+    margin-right: 1rem;
+}
+  
+.nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #ff761b; 
+    transition: width 0.5s ease;
+}
+  
+.nav-link:hover::before {
+    width: 100%;
+}
+  
+.nav-link:hover {
+    color: #ff761b; 
+}
+
+/* HOME */
+
+.banner:hover {
+    filter: brightness(0.4); 
+}
+
+@media (max-width: 639px) {
+    .btn-banner {
+      font-size: small;
+    }
+}
+
+/* DETALLES */
+
+.details {
+    font-size: 16px;
+}
+
+@media (max-width: 1023px) {
+    .details {
+        font-size: 14px;
+    }
+}
+
+/* BLOG */
+
+.blog-hover:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ENVIOS */
+
+@media (max-width: 640px) {
+    .acordeon {
+        font-size: 0.88rem;
+    }
+}
+
+.rotate {
+  transition: transform 0.3s ease;
+}
+
+.open .rotate {
+  transform: rotate(180deg);
+}
+
+/* CONTACTO */
+
+@media (min-width: 768px) {
+    .img-size {
+        height: 650px;
+    }
+}
+
+@media (max-width: 767px) {
+    .img-size {
+        height: 450px;
+    }
+}
+
+/* ANIMACION DE LOGIN Y REGISTRO */
+
+.modal-wrapper {
+    animation: slideDown 1s ease;
+}
+  
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* FOOTER */
+
+@media (max-width: 767px) {
+    .text-size {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 639px) {
+    .margin-b {
+        margin-top: 16px;
+    }
+}
