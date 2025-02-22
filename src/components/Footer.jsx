@@ -28,7 +28,7 @@ const Footer = () => {
         </div>
 
         <div className='flex justify-center border-t mx-12 pb-4 sm:pb-8'>
-            <p className='mt-4 sm:mt-8 text-sm md:text-xl'>&copy; 2024 LEVRONE. Todos los derechos reservados</p>
+            <p className='mt-4 sm:mt-8 text-sm md:text-xl'>&copy; 2025 LEVRONE. Todos los derechos reservados</p>
         </div>
       </main>
     </section>
