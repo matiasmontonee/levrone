@@ -261,7 +261,7 @@ const Checkout = () => {
     <section id='checkout'>
       <main className={`${isScrolled ? 'lg:mt-20 mt-16' : ''}`}>
         {carrito.length === 0 ? (
-            <div className="text-center my-8 mx-4">
+            <div className="text-center my-12 mx-4">
               <p className='mb-4'>Tu carrito está vacío. Agregá productos antes de continuar con el proceso de pago.</p>
               <Link to="/productos" className='text-white bg-orange-600 hover:bg-orange-500 p-1.5 lg:p-2.5 pr-2 lg:pr-4 pl-2 lg:pl-4 rounded-full'><button>Ver productos</button></Link>
             </div>
