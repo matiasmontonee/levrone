@@ -17,6 +17,7 @@ const Registro = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const redirectToLogin = () => {
@@ -38,6 +39,7 @@ const Registro = () => {
     setEmailError('');
     setPasswordError('');
     setConfirmPasswordError('');
+    setIsSubmitting(true);
 
     let hasError = false;
 
@@ -71,6 +73,7 @@ const Registro = () => {
     }
 
     if (hasError) {
+      setIsSubmitting(false);
       return;
     }
 
@@ -90,6 +93,7 @@ const Registro = () => {
         redirectToLogin();
       }, 2000);
     } catch (error) {
+      setIsSubmitting(false);
       if (error.code === 'auth/email-already-in-use') {
         setEmailError('El correo electrónico ya está en uso.');
       } else {
@@ -136,7 +140,9 @@ const Registro = () => {
             {confirmPasswordError && <p className="text-red-500 text-sm mt-1">{confirmPasswordError}</p>}
           </div>
           <div>
-            <button className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleRegister}>Registrarse</button>
+            <button className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleRegister}>
+              {isSubmitting ? "Registrando..." : "Registrarse"}
+            </button>
             <p className="text-sm mt-2 text-center">¿Ya tenés una cuenta? <Link to={`/login`} className='text-blue-500 underline hover:text-blue-400'>Iniciar sesión</Link></p>
           </div>
         </div>

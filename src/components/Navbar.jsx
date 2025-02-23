@@ -4,6 +4,7 @@ import { useDispatch, useSelector  } from 'react-redux';
 import { eliminarProductoDelCarrito, vaciarCarrito, incrementarCantidadProducto, decrementarCantidadProducto } from '../store';
 import { FaTimes, FaHome, FaUser, FaDumbbell, FaPhoneAlt, FaBars, FaShoppingCart, FaShippingFast, FaQuestionCircle, FaTrash, FaArrowRight, FaShoppingBag, FaNewspaper, FaPlus, FaMinus, FaComments, FaTrophy, FaUserPlus } from 'react-icons/fa';
 import Logo from '../assets/imgs/logos/logo.png';
+import Carrito from '../assets/imgs/iconos/carrito.png';
 import { useAuth } from '../hooks/useAuth';
 
 const Navbar = () => {
@@ -240,6 +241,7 @@ const Navbar = () => {
           {carrito.length === 0 ? (
             <>
               <div className='text-center w-full mt-8'>
+                <img src={Carrito} alt="Carrito vacío" className="mx-auto sm:w-52 w-44 sm:h-52 h-44 mb-4" />
                 <p className="text-lg sm:text-xl mb-8">Tu carrito está vacío :(</p>
                 <Link to="/productos" className='text-white bg-orange-600 hover:bg-orange-500 p-2.5 px-4 rounded-full' onClick={toggleCart}><button>Ver productos</button></Link>
               </div>

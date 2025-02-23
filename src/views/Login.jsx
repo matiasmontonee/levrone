@@ -13,6 +13,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState('');
   const [credentialsError, setCredentialsError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [userName, setUserName] = useState('');
   const [showRedirectModal, setShowRedirectModal] = useState(false);
@@ -42,7 +43,8 @@ const Login = () => {
   const handleLogin = async () => {
     setEmailError('');
     setPasswordError('');
-  
+    setIsSubmitting(true);
+
     let hasError = false;
   
     if (!email) {
@@ -59,6 +61,7 @@ const Login = () => {
     }
   
     if (hasError) {
+      setIsSubmitting(false);
       return;
     }
   
@@ -75,6 +78,7 @@ const Login = () => {
       }, 2000);
     } catch (error) {
       setPassword('');
+      setIsSubmitting(false);
       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
         setCredentialsError('Credenciales incorrectas.');
       } else {
@@ -109,7 +113,9 @@ const Login = () => {
           {credentialsError && <p className="text-red-500 text-sm mb-3">{credentialsError}</p>}
           <p className="text-sm"><Link to={`/recuperarpassword`} className='text-orange-600 hover:text-orange-500 hover:underline'>¿Olvidó su contraseña?</Link></p>
           <div className='mt-2'>
-            <button className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>Iniciar Sesión</button>
+          <button className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded w-full focus:outline-none focus:shadow-outline" type="button" onClick={handleLogin}>
+            {isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+          </button>
             <p className="text-sm mt-2 text-center">¿No tenés una cuenta? <Link to={`/registro`} className='text-blue-500 underline hover:text-blue-400'>Registrarse</Link></p>
           </div>
         </div>
