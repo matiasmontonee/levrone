@@ -26,8 +26,14 @@ export const vaciarCarrito = () => ({
 });
 
 // Reducer
+const carritoGuardado = JSON.parse(localStorage.getItem('carrito')) || [];
+
+const calcularTotal = (carrito) =>
+  parseFloat(carrito.reduce((total, producto) => total + (producto.precioTotal || 0), 0).toFixed(3));
+
 const initialState = {
-  carrito: JSON.parse(localStorage.getItem('carrito')) || [],
+  carrito: carritoGuardado,
+  precioTotalCarrito: calcularTotal(carritoGuardado),
 };
 
 const carritoReducer = (state = initialState, action) => {
